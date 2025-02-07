@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimelessCore_Data.Repositories
+namespace EventMate_Data.Repositories
 {
     internal class AuthRepository
     {

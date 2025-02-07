@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimelessCore_Data.IRepositories
+namespace EventMate_Service.Services
 {
-    internal class IAuthRepository
+    internal class AuthService
     {
     }
 }
