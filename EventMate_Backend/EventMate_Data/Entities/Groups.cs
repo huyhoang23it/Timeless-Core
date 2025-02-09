@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EventMate_Data.Entities
+{
+    public class Groups
+    {
+        [Key]
+        public Guid GroupId { get; set; } 
+        public string? Img { get; set; }
+
+        [Required]
+        public string GroupName { get; set; } = string.Empty;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public Guid? EventId { get; set; }
+
+        [Required]
+        public int TotalMember { get; set; }
+
+        [Required]
+        public int GroupType { get; set; }
+
+        [Required]
+        public Guid Leader { get; set; }
+
+        public string? Description { get; set; }
+
+        [Required]
+        public int Visibility { get; set; }
+
+        [Required]
+        public int Status { get; set; }
+    }
+}
