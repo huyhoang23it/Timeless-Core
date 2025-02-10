@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,7 +25,7 @@ namespace EventMate_Data.Entities
         public Guid GroupId { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public PlanStatus Status { get; set; }
         [ForeignKey("GroupId")] public virtual Groups Groups { get; set; } = null!;
         public virtual ICollection<Plan_Details>? Plan_Details { get; set; }
     }

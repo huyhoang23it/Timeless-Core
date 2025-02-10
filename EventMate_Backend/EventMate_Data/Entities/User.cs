@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EventMate_Common.Status;
 
 namespace EventMate_Data.Entities
 {
@@ -37,9 +38,10 @@ namespace EventMate_Data.Entities
         public string? FacebookId { get; set; }
 
         [Required]
-        public int Status { get; set; }
-        
-        public virtual ICollection<Requests>? Requests { get; set; }
+        public UserStatus Status { get; set; }
+
+        public virtual ICollection<Requests> SentRequests { get; set; } = new List<Requests>();
+        public virtual ICollection<Requests> ReceivedRequests { get; set; } = new List<Requests>();
         public virtual ICollection<FeedbackUser>? FeedbackUsers { get; set; }
         public virtual ICollection<Posts>? Posts { get; set; }
         public virtual ICollection<Comments>? Comments { get; set; }

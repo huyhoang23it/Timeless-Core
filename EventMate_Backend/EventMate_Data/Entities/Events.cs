@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using EventMate_Common.Type;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -36,10 +38,10 @@ namespace EventMate_Data.Entities
         public string? Description { get; set; }
 
         [Required]
-        public int Type { get; set; }
+        public EventType Type { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public EventStatus Status { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }
         public virtual ICollection<Posts>? Posts { get; set; }   
         public virtual ICollection<Groups>? Groups {  get; set; }

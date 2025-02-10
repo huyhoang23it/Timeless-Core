@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimelessCore_Data.Data
+namespace EventMate_Common.Type
 {
-    internal class Class1
+    public enum PostType
     {
+        None,
+        Forgot,
+        Sell,
     }
 }

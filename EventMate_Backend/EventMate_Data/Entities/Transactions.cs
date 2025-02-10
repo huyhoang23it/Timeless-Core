@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace EventMate_Data.Entities
 {
@@ -32,7 +33,7 @@ namespace EventMate_Data.Entities
         public decimal Amount { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public TransactionStatus Status { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }
         [ForeignKey("WalletId")] public virtual Wallet Wallet { get; set; }
     }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EventMate_Common.Status;
 
 namespace EventMate_Data.Entities
 {
@@ -25,7 +26,7 @@ namespace EventMate_Data.Entities
         public Guid UserId { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public ReportStatus Status { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }
         [ForeignKey("OrderId")] public virtual Order Order { get; set; }
 

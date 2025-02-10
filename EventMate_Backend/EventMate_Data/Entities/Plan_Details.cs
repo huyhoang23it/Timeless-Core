@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,8 +22,8 @@ namespace EventMate_Data.Entities
         public DateTime? Schedule { get; set; }
 
         [Required]
-        public int Status { get; set; }
-        [ForeignKey("Plan_id")] public virtual Plans Plan { get; set; }
+        public PlanDetailStatus Status { get; set; }
+        [ForeignKey("PlanId")] public virtual Plans Plan { get; set; }
 
     }
 }
