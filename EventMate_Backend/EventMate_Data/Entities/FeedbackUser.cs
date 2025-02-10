@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace EventMate_Data.Entities
         [Key]
         public Guid FeedbackId { get; set; } 
         [Required]
-        public int Rate { get; set; }
+        public float Rate { get; set; }
 
         [Required]
         public Guid GroupId { get; set; }
@@ -31,5 +32,9 @@ namespace EventMate_Data.Entities
 
         [Required]
         public int Status { get; set; }
+        [ForeignKey("GroupId")] public virtual Groups Group { get; set; }
+        [ForeignKey("ReviewerId")] public virtual Groups Reviewer { get; set; }
+        [ForeignKey("ReviewedUserId")] public virtual Groups Reviewed { get; set; }
+
     }
 }

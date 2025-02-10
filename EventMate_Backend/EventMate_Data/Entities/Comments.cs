@@ -11,18 +11,23 @@ namespace EventMate_Data.Entities
     public class Comments
     {
         [Key]
-        public int CommentId { get; set; }
+        public Guid CommentId { get; set; }
 
         [Required]
         public string Content { get; set; } = string.Empty;
+        [Required]
+        public string UserId { get; set; }
 
         [Required]
-        public int PostId { get; set; }
+        public Guid PostId { get; set; }
 
         [Required]
         public int CommentBy { get; set; }
 
         [Required]
         public DateTime CommentAt { get; set; } = DateTime.UtcNow;
+        [ForeignKey("PostId")] public virtual Posts Post {  get; set; }
+        [ForeignKey("UserId")] public virtual User User { get; set; }
+        public virtual ICollection<ReplyComments>? ReplyComments { get; set; }
     }
 }

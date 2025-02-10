@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,5 +33,7 @@ namespace EventMate_Data.Entities
 
         [Required]
         public int Status { get; set; }
+        [ForeignKey("UserId")] public virtual User User { get; set; }
+        [ForeignKey("WalletId")] public virtual Wallet Wallet { get; set; }
     }
 }

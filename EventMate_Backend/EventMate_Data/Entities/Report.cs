@@ -26,5 +26,9 @@ namespace EventMate_Data.Entities
 
         [Required]
         public int Status { get; set; }
+        [ForeignKey("UserId")] public virtual User User { get; set; }
+        [ForeignKey("OrderId")] public virtual Order Order { get; set; }
+
+
     }
 }

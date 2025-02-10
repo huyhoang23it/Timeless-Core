@@ -11,7 +11,7 @@ namespace EventMate_Data.Entities
     public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public string FullName { get; set; } = string.Empty;
@@ -32,11 +32,28 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public string Role { get; set; } = "User";
+        public Guid RoleId { get; set; } 
 
         public string? FacebookId { get; set; }
 
         [Required]
         public int Status { get; set; }
+        
+        public virtual ICollection<Requests>? Requests { get; set; }
+        public virtual ICollection<FeedbackUser>? FeedbackUsers { get; set; }
+        public virtual ICollection<Posts>? Posts { get; set; }
+        public virtual ICollection<Comments>? Comments { get; set; }
+        public virtual ICollection<ReplyComments>? ReplyComments { get; set; }
+        public virtual ICollection<Reactions>? Reactions { get; set; }
+        public virtual ICollection<User_Group>? User_Group { get; set; }
+        public virtual ICollection<Events>? Events { get; set; }
+        [ForeignKey("RoleId")] public virtual Role Role { get; set; }
+        public virtual ICollection<Messages>? Messages { get; set; }
+        public virtual ICollection<User_Conversation>? User_Conversations { get; set; }
+        public virtual Wallet Wallet { get; set; }
+        public virtual ICollection<Item>? Iterms { get; set; }
+        public virtual ICollection<Order>? Orders { get; set; }
+        public virtual ICollection<Report>? Reports { get; set; }
+        public virtual ICollection<Transactions>? Transactions { get; set; }
     }
 }

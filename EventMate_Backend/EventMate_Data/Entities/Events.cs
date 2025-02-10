@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public Guid CreatedBy { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public DateTime TimeStart { get; set; }
@@ -39,5 +40,8 @@ namespace EventMate_Data.Entities
 
         [Required]
         public int Status { get; set; }
+        [ForeignKey("UserId")] public virtual User User { get; set; }
+        public virtual ICollection<Posts>? Posts { get; set; }   
+        public virtual ICollection<Groups>? Groups {  get; set; }
     }
 }

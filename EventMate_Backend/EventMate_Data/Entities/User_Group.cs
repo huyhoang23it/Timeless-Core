@@ -8,17 +8,15 @@ using System.Threading.Tasks;
 
 namespace EventMate_Data.Entities
 {
-    public class Wallet
+    public class User_Group
     {
         [Key]
-        public Guid WalletId { get; set; } 
-
+        public Guid UsergroupId { get; set; }
         [Required]
         public Guid UserId { get; set; }
-
         [Required]
-        public decimal Balance { get; set; }
+        public Guid GroupId { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }
-        public virtual ICollection<Transactions>? Transactions { get; set; }
+        [ForeignKey("GroupId")] public virtual Groups Group { get; set; }
     }
 }

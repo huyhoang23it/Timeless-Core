@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public Guid? EventId { get; set; }
+        public Guid EventId { get; set; }
 
         [Required]
         public int TotalMember { get; set; }
@@ -38,5 +39,14 @@ namespace EventMate_Data.Entities
 
         [Required]
         public int Status { get; set; }
+
+        [ForeignKey("EventId")] public virtual Events Events { get; set; }
+        [ForeignKey("Leader")] public virtual User User { get; set; }
+        public virtual Plans Plan { get; set; }
+        public virtual Conversations Conversation { get; set; }
+        public virtual ICollection<Requests>? Requests { get; set; }
+        public virtual ICollection<User_Group>? User_Groups { get; set; }
+
+
     }
 }
