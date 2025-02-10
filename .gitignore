@@ -24,4 +24,6 @@ FoodDeliver_API/FoodDeliver_API/appsettings.json
 /TimelessCore_Backend/TimelessCore_Backend/appsettings.Development.json
 
 node_modules/
+Migrations/
+
 
