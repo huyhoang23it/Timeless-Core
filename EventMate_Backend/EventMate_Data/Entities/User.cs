@@ -22,6 +22,8 @@ namespace EventMate_Data.Entities
         public DateTime? DateOfBirth { get; set; }
 
         public string? Avatar { get; set; }
+        public int? GroupSuccess { get; set; }
+        public string? Introduce { get; set; }
 
         [Required]
         [EmailAddress]
