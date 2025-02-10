@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using EventMate_Common.Type;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,10 +28,10 @@ namespace EventMate_Data.Entities
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public int RequestType { get; set; }
+        public RequestType RequestType { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public RequestStatus Status { get; set; }
         [ForeignKey("GroupId")] public virtual Groups Group { get; set; }
         [ForeignKey("SenderId")] public virtual User Sender { get; set; }
         [ForeignKey("ReceiverId")] public virtual User Receiver { get; set; }

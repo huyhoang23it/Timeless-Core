@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using EventMate_Common.Type;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,10 +30,10 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public int FeedbackType { get; set; }
+        public FeedbackType FeedbackType { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public FeedbackUserStatus Status { get; set; }
         [ForeignKey("GroupId")] public virtual Groups Group { get; set; }
         [ForeignKey("ReviewerId")] public virtual Groups Reviewer { get; set; }
         [ForeignKey("ReviewedUserId")] public virtual Groups Reviewed { get; set; }

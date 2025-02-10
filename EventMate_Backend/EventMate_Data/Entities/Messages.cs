@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using EventMate_Common.Type;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,13 +25,13 @@ namespace EventMate_Data.Entities
         public string Content { get; set; } = string.Empty;
 
         [Required]
-        public int MessageType { get; set; }
+        public MessageType MessageType { get; set; }
 
         [Required]
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public int Status { get; set; }
+        public MessageStatus Status { get; set; }
         [ForeignKey("SenderId")] public virtual User User { get; set; }
         [ForeignKey("ConversationId")] public virtual Conversations Conversation { get; set; }
 

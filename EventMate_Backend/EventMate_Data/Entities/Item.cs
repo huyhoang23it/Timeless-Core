@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,7 +30,7 @@ namespace EventMate_Data.Entities
         public int Quantity { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public ItemStatus Status { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }
         public virtual ICollection<Order>? Orders { get; set; } 
 

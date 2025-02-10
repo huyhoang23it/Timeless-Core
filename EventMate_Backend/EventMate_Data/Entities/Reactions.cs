@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventMate_Common.Type;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,7 +21,7 @@ namespace EventMate_Data.Entities
         public Guid UserId { get; set; }
 
         [Required]
-        public int ReactionType { get; set; }
+        public ReactionType ReactionType { get; set; }
 
         [ForeignKey("PostId")] public virtual Posts Post { get; set; }
         [ForeignKey("UserId")] public virtual User User { get; set; }

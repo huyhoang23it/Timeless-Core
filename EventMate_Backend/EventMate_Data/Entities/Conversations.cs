@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EventMate_Common.Status;
+using EventMate_Common.Type;
 
 namespace EventMate_Data.Entities
 {
@@ -18,7 +20,7 @@ namespace EventMate_Data.Entities
         public Guid? GroupId { get; set; }
 
         [Required]
-        public string Type { get; set; } = string.Empty;
+        public ConversationType Type { get; set; }
 
         public Guid? CreatedBy { get; set; }
 
@@ -26,7 +28,7 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public int Status { get; set; }
+        public ConversationStatus Status { get; set; }
         [ForeignKey("GroupId")] public virtual Groups? Group { get; set; }
         public virtual ICollection<User_Conversation>? User_Conversations { get; set; }
         public virtual ICollection<Messages>? Messages { get; set; }

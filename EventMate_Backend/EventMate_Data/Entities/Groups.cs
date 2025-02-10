@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventMate_Common.Status;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,9 +28,6 @@ namespace EventMate_Data.Entities
         public int TotalMember { get; set; }
 
         [Required]
-        public int GroupType { get; set; }
-
-        [Required]
         public Guid Leader { get; set; }
 
         public string? Description { get; set; }
@@ -38,7 +36,7 @@ namespace EventMate_Data.Entities
         public int Visibility { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public GroupStatus Status { get; set; }
 
         [ForeignKey("EventId")] public virtual Events Events { get; set; }
         [ForeignKey("Leader")] public virtual User User { get; set; }
