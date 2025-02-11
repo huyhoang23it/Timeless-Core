@@ -24,4 +24,9 @@
     <ProjectReference Include="..\EventMate_Common\EventMate_Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IRepositories\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

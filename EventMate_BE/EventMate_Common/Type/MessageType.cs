@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventMate_Common.Constants
+namespace EventMate_Common.Type
 {
-    public class Constants
+    public enum MessageType
     {
+        None,
+        Text,
+        Img,
+        Video,
 
     }
 }
