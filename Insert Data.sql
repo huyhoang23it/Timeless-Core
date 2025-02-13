@@ -2,7 +2,8 @@
 INSERT INTO Role (RoleId, RoleName, Status) VALUES
 (1, 'Admin', 1),
 (2, 'User', 1),
-(3, 'Moderator', 1);
+(4, 'Staff', 1),
+(3, 'Event Organizer', 1);
 
 -- Insert data into User table
 INSERT INTO User (UserId, FullName, Email, Password, RoleId, Status, CreatedAt) VALUES
