@@ -1,4 +1,5 @@
-﻿using EventMate_Data.Entities;
+﻿using Eventmate_Data.Entities;
+using EventMate_Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ namespace EventMate.Data
         public DbSet<User_Conversation>? User_Conversations { get; set; }
         public DbSet<User_Group>? User_Groups { get; set; }
         public DbSet<Wallet>? Wallets { get; set; }
+        public DbSet<OTPAuthen> OTPAuthens { get; set; }
         #endregion
     }
 }
