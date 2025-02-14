@@ -20,14 +20,19 @@ const changeLanguage = async () => {
     await i18n.changeLanguage("vi");
 }
     return (
-        <div>
-           <Img />
-            <h2>{t("intro-name")}</h2>
-            <h2>{t("login:welcome-message")}</h2>
-           
-            <button onClick={login}>Login</button>
-            <button onClick={changeLanguage}>change lang</button>
-        </div>
+        <div className="bg-white p-4">
+  <Img />
+  <h2>{t("intro-name")}</h2>
+  <h2>{t("login:welcome-message")}</h2>
+
+  <button onClick={login} className="bg-blue-500 text-white px-4 py-2 rounded">
+    Login
+  </button>
+  <button onClick={changeLanguage} className="bg-gray-500 text-white px-4 py-2 rounded ml-2">
+    Change Lang
+  </button>
+</div>
+
        
     );
 }
