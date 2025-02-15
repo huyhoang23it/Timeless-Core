@@ -14,7 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     if (password !== "123456") {
       setError(true);
-      setTimeout(() => setError(false), 500); // Xóa hiệu ứng rung sau 0.5s
+      setTimeout(() => setError(false), 1000); // Xóa hiệu ứng rung
     } else {
       console.log("Email:", email, "Password:", password);
     }
@@ -32,7 +32,7 @@ export default function LoginPage() {
         className="bg-white/80 backdrop-blur-lg shadow-xl rounded-xl px-8 py-10 w-full max-w-md mx-4"
       >
         {/* Tiêu đề */}
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Account Login</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
 
         {/* Form đăng nhập */}
         <motion.form
