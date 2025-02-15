@@ -2,97 +2,183 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion"; // Import thư viện animation
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
+    if (password !== "123456") {
+      setError(true);
+      setTimeout(() => setError(false), 500); // Xóa hiệu ứng rung sau 0.5s
+    } else {
+      console.log("Email:", email, "Password:", password);
+    }
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/bg-01.svg')" }}
-    >
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Account Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/bg-01.jpg')" }}>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
+      {/* Container chính với hiệu ứng scale */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-white/80 backdrop-blur-lg shadow-xl rounded-xl px-8 py-10 w-full max-w-md mx-4"
+      >
+        {/* Tiêu đề */}
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Account Login</h2>
+
+        {/* Form đăng nhập */}
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+          animate={error ? { x: [-10, 10, -10, 10, 0] } : {}}
+          transition={{ duration: 0.2 }}
+        >
+          {/* Input Email */}
+          <motion.div
+            className="relative"
+            whileFocus={{ scale: 1.05 }}
+          >
+            <label className="block mb-1 font-medium text-gray-700">Email</label>
+            <motion.input
               type="email"
-              name="email"
-              placeholder="Email"
+              placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none 
+               text-lg font-semibold text-gray-900 bg-white/90 
+               transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 
+               focus:shadow-lg placeholder-opacity-100 focus:placeholder-opacity-50"
             />
-          </div>
+          </motion.div>
 
-          <div>
-            <input
+          {/* Input Password */}
+          <motion.div
+            className="relative mt-4"
+            whileFocus={{ scale: 1.05 }}
+          >
+            <label className="block mb-1 font-medium text-gray-700">Password</label>
+            <motion.input
               type="password"
-              name="password"
-              placeholder="Password"
+              placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              className={`w-full rounded-md border px-4 py-2 outline-none 
+               text-lg font-semibold text-gray-900 bg-white/90 
+               transition-all duration-300 focus:ring-2 
+               ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"}
+               focus:shadow-lg placeholder-opacity-100 focus:placeholder-opacity-50`}
             />
-          </div>
 
-          <div className="flex justify-between items-center text-sm">
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" className="rounded" />
-              <span>Remember Me</span>
+            {/* Hiển thị lỗi nếu sai mật khẩu */}
+            {error && (
+              <motion.p
+                className="text-red-500 text-sm mt-1"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                ⚠ Incorrect Password
+              </motion.p>
+            )}
+          </motion.div>
+
+          {/* Ghi nhớ + Quên mật khẩu */}
+          <div className="flex items-center justify-between text-sm">
+            <label
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => setChecked(!checked)}
+            >
+              <motion.div
+                className={`w-10 h-5 flex items-center rounded-full p-1 transition-colors ${checked ? "bg-blue-500" : "bg-gray-300"
+                  }`}
+                whileTap={{ scale: 0.9 }}
+              >
+                <motion.div
+                  className={`w-4 h-4 rounded-full shadow-md transform transition-transform ${checked ? "translate-x-5 bg-white" : "translate-x-0 bg-blue-500"
+                    }`}
+                />
+              </motion.div>
+              <span className={checked ? "text-blue-600 font-medium" : "text-gray-600"}>
+                Remember Me
+              </span>
             </label>
-            <a href="#" className="text-blue-600 hover:underline">
+            <a
+              href="#"
+              className="relative text-blue-600 font-medium transition-all duration-300
+             before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
+             before:bg-blue-600 before:transition-all before:duration-300 
+             hover:text-blue-700 hover:before:w-full hover:before:left-0 
+             hover:scale-105"
+            >
               Forgot Password?
             </a>
+
           </div>
 
-          <button
+          {/* Nút Login */}
+          <motion.button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold transition-all duration-300
+                      hover:bg-blue-700 hover:shadow-lg hover:scale-105"
+            whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
             Login
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
 
+        {/* Đăng ký */}
         <div className="text-center mt-4">
-          <p>
-            Don't have an account?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
+          <p className="text-gray-600">Don't have an account?{" "}
+            <a
+              href="#"
+              className="relative text-blue-600 font-medium transition-all duration-300
+             before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
+             before:bg-blue-600 before:transition-all before:duration-300 
+             hover:text-blue-700 hover:before:w-full hover:before:left-0 
+             hover:scale-105"
+            >
               Sign Up
             </a>
+
           </p>
         </div>
 
-        <div className="text-center my-4">— Or Sign In With —</div>
+        {/* Hoặc đăng nhập với mạng xã hội */}
+        <div className="relative flex py-4 items-center">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-2 text-gray-500">Or Sign In With</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
 
+        {/* Nút mạng xã hội */}
         <div className="flex justify-center space-x-4">
-          <a
+          <motion.a
             href="#"
-            className="flex items-center space-x-2 px-4 py-2 border rounded bg-blue-600 text-white hover:bg-blue-700"
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300"
+            whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
             <i className="fab fa-facebook-f"></i>
             <span>Facebook</span>
-          </a>
-          <a
+          </motion.a>
+
+          <motion.a
             href="#"
-            className="flex items-center space-x-2 px-4 py-2 border rounded bg-red-600 text-white hover:bg-red-700"
+            className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
+            whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(255, 0, 0, 0.3)" }}
           >
             <i className="fab fa-google"></i>
             <span>Gmail</span>
-          </a>
+          </motion.a>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
-};
-
-export default LoginPage;
+}
