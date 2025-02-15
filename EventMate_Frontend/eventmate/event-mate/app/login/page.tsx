@@ -4,6 +4,8 @@ import i18n from "i18next";
 // import { AuthRepository } from "@/repositories/AuthRepository";
 import { useLanguage } from "@/providers/LanguageProvider";
 import Img from "@/public/next.svg"
+import { toast } from "@/ultilities/toastMessageHelper";
+
 
 
 const Login = () => {
@@ -17,11 +19,12 @@ localStorage.setItem("token", "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htb
 //     console.log(response);
 // }
 const changeLanguage = async () => {
-    await i18n.changeLanguage("vi");
+console.log("change language");
+  toast.error("Change language successfully");
+    // await i18n.changeLanguage("vi");
 }
     return (
         <div className="bg-white p-4">
-  <Img />
   <h2>{t("intro-name")}</h2>
   <h2>{t("login:welcome-message")}</h2>
 
