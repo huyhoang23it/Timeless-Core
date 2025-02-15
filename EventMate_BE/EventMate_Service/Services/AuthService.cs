@@ -1,7 +1,12 @@
-﻿using EventMate_Common.Status;
+﻿
+using Eventmate_Common.Helpers;
+using EventMate_Common.Constants;
+using EventMate_Common.Status;
+using Eventmate_Data.Entities;
 using Eventmate_Data.IRepositories;
 using EventMate_Data.Entities;
 using EventMate_Data.IRepositories;
+using EventMate_Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -19,12 +24,16 @@ namespace EventMate_Service.Services
         private readonly IAuthRepository authRepository;
         private readonly IUserRepository userRepository;
         private readonly IConfiguration _configuration;
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IUserRepository userRepository)
+        private readonly EmailService _emailService;
+        private readonly AESHelper _AESHelper;
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IUserRepository userRepository,
+            EmailService emailService, AESHelper AESHelper)
         {
             this.authRepository = authRepository;
             this.userRepository = userRepository;
             _configuration = configuration;
-         
+            _emailService = emailService;
+            _AESHelper = AESHelper;
         }
 
         public async Task<string> LoginAsync(User userMapper)
@@ -77,11 +86,13 @@ namespace EventMate_Service.Services
         }
         public async Task<string> CreateNewAccount(User user)
         {
-
-            // Check if the user already exists
-            var existingUser = await authRepository.GetUserByEmail(user.Email);
-            if (existingUser == null)
+            try
             {
+                if (await IsExistUser(user.Email))
+                {
+                    throw new InvalidOperationException("User already exists.");
+                }
+
                 // Set new user information
                 user.CreatedAt = DateTime.Now;
                 user.Status = UserStatus.Active;
@@ -99,12 +110,64 @@ namespace EventMate_Service.Services
                 // Create and gen token
                 return await CreateToken(user);
             }
-            else
+            catch(Exception ex)
             {
-                // Returns a message or value if the user already exists
-                throw new InvalidOperationException("User already exists.");
+                throw new Exception(ex.Message);
+            }
+              
+            
+        }
+        public async Task SendOTPtoEmail(string OTPCode, string email)
+        {
+
+            var subject = Constants.SubjectOTPEmail;
+            var body = string.Format(Constants.OTPEmailBody, OTPCode);
+
+            _emailService.SendEmail(email, subject, body);
+        }
+        public async Task<bool> IsExistUser(string email)
+        {
+            var existingUser = await authRepository.GetUserByEmail(email);
+            return existingUser !=null;
+
+        }
+        public async Task<OTPAuthen> CreateOTP(string email, string password)
+        {
+            try
+            {
+                var otp = await authRepository.CreateOTP(email, password);
+              
+                await SendOTPtoEmail(otp.OTPCode, email);
+                return otp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
+        public async Task<OTPAuthen> VerifyOTP(string OTPCode,string token)
+        {
+            try
+            {
+                var otp = await authRepository.CheckOTP(OTPCode,token); 
+                var emailPassword = _AESHelper.Decrypt(token);
+                var email = emailPassword.Split("::")[0];
+                var password = emailPassword.Split("::")[1];
+                var user = new User
+                {
+                    Email = email,
+                    Password = password,
+                };
+                await CreateNewAccount(user);
+                return otp;
+            }
+          
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
     }
 

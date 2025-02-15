@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using EventMate_Common.Status;
 using EventMate_Data.Entities;
 using EventMate_Service.Services;
 using EventMate_WebAPI.ModelsMapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
+using static System.Net.WebRequestMethods;
 
 namespace EventMate_WebAPI.Controllers
 {
@@ -19,7 +22,7 @@ namespace EventMate_WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> LogIn(LoginModel model)
         {
             IActionResult response;
@@ -40,19 +43,62 @@ namespace EventMate_WebAPI.Controllers
             {
                 response = Unauthorized(new { message = "Either email address or password is incorrect. Please try again" });
             }
-            else if (token.Equals("Inactive"))
+            else if (token.Equals(UserStatus.Inactive))
             {
                 response = Unauthorized(new { message = "Your account is disabled. Contact us for help." });
             }
             else
             {
-                response = Ok(new { token });
+                response = Ok(new {token =  token });
             }
 
             return response;
         }
+        [HttpPost("create-otp")]
+        public async Task<IActionResult> CreateOTP(OTPRequest request)
+        {
+            try
+            {
+                if (await _authService.IsExistUser(request.Email))
+                {
+                    return BadRequest(new { message = "Email đã tồn tại" });
+                }
 
-        [HttpPost("SignUp")]
+                var otp = await _authService.CreateOTP(request.Email , request.Password);
+
+                return Ok(new { message = otp.Token });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOTP( string OTPCode, string token)
+        {
+            try
+            {
+                var otp = await _authService.VerifyOTP(OTPCode, token);
+                if (otp == null)
+                {
+                    return BadRequest(new { message = "OTP không hợp lệ." });
+                }
+
+                if (otp.ExpireTime <= DateTime.Now)
+                {
+                    return BadRequest(new { message = "OTP đã hết hạn." });
+                }
+
+                return Ok(new { message = "Xác thực thành công! Tài khoản đã được tạo." });
+            }       
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp(SignUpModel signUpModel)
         {
             try
@@ -66,8 +112,7 @@ namespace EventMate_WebAPI.Controllers
             }
             catch (Exception ex)
             {
-
-                return BadRequest(new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
