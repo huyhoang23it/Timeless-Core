@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion"; // Import thư viện animation
-import { FaFacebookF } from "react-icons/fa";
 import { SiGmail } from "react-icons/si"; // Gmail không có icon chính thức trong Heroicons, nên dùng react-icons
 
 export default function LoginPage() {
@@ -89,7 +87,7 @@ export default function LoginPage() {
 
           {/* Ghi nhớ + Quên mật khẩu */}
           <div className="flex items-center justify-between text-sm">
-            <label
+            {/* <label
               className="flex items-center space-x-2 cursor-pointer"
               onClick={() => setChecked(!checked)}
             >
@@ -106,17 +104,18 @@ export default function LoginPage() {
               <span className={checked ? "text-blue-600 font-medium" : "text-gray-600"}>
                 Remember Me
               </span>
-            </label>
+            </label> */}
             <a
               href="#"
-              className="relative text-blue-600 font-medium transition-all duration-300
-             before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
-             before:bg-blue-600 before:transition-all before:duration-300 
-             hover:text-blue-700 hover:before:w-full hover:before:left-0 
-             hover:scale-105"
+              className="relative text-blue-600 font-medium transition-all duration-300 
+      before:absolute before:-bottom-1 before:right-0 before:w-0 before:h-[2px] 
+      before:bg-blue-600 before:transition-all before:duration-300 
+      hover:text-blue-700 hover:before:w-full hover:before:right-0 
+      hover:scale-105 text-right block ml-auto"
             >
               Forgot Password?
             </a>
+
 
           </div>
 
@@ -133,7 +132,20 @@ export default function LoginPage() {
 
         {/* Đăng ký */}
         <div className="text-center mt-4">
-          <p className="text-gray-600">Don't have an account?{" "}
+          <p className="text-gray-600">Don't have an account?        
+          </p>
+          <p className="text-gray-600">
+          <a
+              href="#"
+              className="relative text-blue-600 font-medium transition-all duration-300
+             before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
+             before:bg-blue-600 before:transition-all before:duration-300 
+             hover:text-blue-700 hover:before:w-full hover:before:left-0 
+             hover:scale-105"
+            >
+              Sign Up {" "}
+            </a>
+            Or{" "}
             <a
               href="#"
               className="relative text-blue-600 font-medium transition-all duration-300
@@ -142,7 +154,7 @@ export default function LoginPage() {
              hover:text-blue-700 hover:before:w-full hover:before:left-0 
              hover:scale-105"
             >
-              Sign Up
+              Sign up As Event Organizer
             </a>
 
           </p>
@@ -158,14 +170,14 @@ export default function LoginPage() {
         {/* Nút mạng xã hội */}
         <div className="flex justify-center space-x-4">
           {/* Nút Facebook */}
-          <motion.a
+          {/* <motion.a
             href="#"
             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
             <FaFacebookF className="w-5 h-5" />
             <span>Facebook</span>
-          </motion.a>
+          </motion.a> */}
 
           {/* Nút Gmail */}
           <motion.a
