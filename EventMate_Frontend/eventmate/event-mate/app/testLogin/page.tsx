@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion"; // Import thư viện animation
+import { FaFacebookF } from "react-icons/fa";
+import { SiGmail } from "react-icons/si"; // Gmail không có icon chính thức trong Heroicons, nên dùng react-icons
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -42,39 +44,33 @@ export default function LoginPage() {
           transition={{ duration: 0.2 }}
         >
           {/* Input Email */}
-          <motion.div
-            className="relative"
-            whileFocus={{ scale: 1.05 }}
-          >
+          <motion.div className="relative" whileFocus={{ scale: 1.05 }}>
             <label className="block mb-1 font-medium text-gray-700">Email</label>
             <motion.input
               type="email"
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none 
-               text-lg font-semibold text-gray-900 bg-white/90 
-               transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 
-               focus:shadow-lg placeholder-opacity-100 focus:placeholder-opacity-50"
+              className="w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
+      text-lg font-semibold text-gray-900 bg-white/90 
+      transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 
+      focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm focus:placeholder-opacity-50"
             />
           </motion.div>
 
           {/* Input Password */}
-          <motion.div
-            className="relative mt-4"
-            whileFocus={{ scale: 1.05 }}
-          >
+          <motion.div className="relative mt-4" whileFocus={{ scale: 1.05 }}>
             <label className="block mb-1 font-medium text-gray-700">Password</label>
             <motion.input
               type="password"
               placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full rounded-md border px-4 py-2 outline-none 
-               text-lg font-semibold text-gray-900 bg-white/90 
-               transition-all duration-300 focus:ring-2 
-               ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"}
-               focus:shadow-lg placeholder-opacity-100 focus:placeholder-opacity-50`}
+              className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
+      text-lg font-semibold text-gray-900 bg-white/90 
+      transition-all duration-300 focus:ring-2 
+      ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"} 
+      focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm focus:placeholder-opacity-50`}
             />
 
             {/* Hiển thị lỗi nếu sai mật khẩu */}
@@ -89,6 +85,7 @@ export default function LoginPage() {
               </motion.p>
             )}
           </motion.div>
+
 
           {/* Ghi nhớ + Quên mật khẩu */}
           <div className="flex items-center justify-between text-sm">
@@ -160,21 +157,23 @@ export default function LoginPage() {
 
         {/* Nút mạng xã hội */}
         <div className="flex justify-center space-x-4">
+          {/* Nút Facebook */}
           <motion.a
             href="#"
             className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
-            <i className="fab fa-facebook-f"></i>
+            <FaFacebookF className="w-5 h-5" />
             <span>Facebook</span>
           </motion.a>
 
+          {/* Nút Gmail */}
           <motion.a
             href="#"
             className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(255, 0, 0, 0.3)" }}
           >
-            <i className="fab fa-google"></i>
+            <SiGmail className="w-5 h-5" />
             <span>Gmail</span>
           </motion.a>
         </div>
