@@ -90,7 +90,7 @@ namespace EventMate_Service.Services
             {
                 if (await IsExistUser(user.Email))
                 {
-                    throw new InvalidOperationException("User already exists.");
+                    throw new InvalidOperationException("User already exists."+ user.Email);
                 }
 
                 // Set new user information

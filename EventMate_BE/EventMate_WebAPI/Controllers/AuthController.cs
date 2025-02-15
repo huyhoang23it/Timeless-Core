@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventMate_Common.Common;
 using EventMate_Common.Status;
 using EventMate_Data.Entities;
 using EventMate_Service.Services;
@@ -25,35 +26,34 @@ namespace EventMate_WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LogIn(LoginModel model)
         {
-            IActionResult response;
-
-            //InValid Model
-            if (!ModelState.IsValid)
+            try
             {
-                response = BadRequest();
-            }
-            //mapper loginmodel to user
-            var user = _mapper.Map<User>(model);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.InvalidRequest, "Dữ liệu không hợp lệ."));
+                }
 
-            //Check acc and create token
-            var token = await _authService.LoginAsync(user);
+                var user = _mapper.Map<User>(model);
 
-            //Invalid account and returned emtry
-            if (string.IsNullOrEmpty(token))
-            {
-                response = Unauthorized(new { message = "Either email address or password is incorrect. Please try again" });
-            }
-            else if (token.Equals(UserStatus.Inactive))
-            {
-                response = Unauthorized(new { message = "Your account is disabled. Contact us for help." });
-            }
-            else
-            {
-                response = Ok(new {token =  token });
-            }
+                var token = await _authService.LoginAsync(user);
 
-            return response;
+                if (string.IsNullOrEmpty(token))
+                {
+                    return Unauthorized(new ApiResponse<string>(401, ResponseKeys.InvalidCredentials, "Email hoặc mật khẩu không chính xác."));
+                }
+                else if (token.Equals(UserStatus.Inactive))
+                {
+                    return Unauthorized(new ApiResponse<string>(403, ResponseKeys.AccountDisabled, "Tài khoản của bạn đã bị vô hiệu hóa. Liên hệ hỗ trợ để được giúp đỡ."));
+                }
+
+                return Ok(new ApiResponse<string>(200, ResponseKeys.LoginSuccess, token));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
+            }
         }
+
         [HttpPost("create-otp")]
         public async Task<IActionResult> CreateOTP(OTPRequest request)
         {
@@ -61,39 +61,39 @@ namespace EventMate_WebAPI.Controllers
             {
                 if (await _authService.IsExistUser(request.Email))
                 {
-                    return BadRequest(new { message = "Email đã tồn tại" });
+                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.EmailAlreadyExist, "Email already exists"));
                 }
 
-                var otp = await _authService.CreateOTP(request.Email , request.Password);
+                var otp = await _authService.CreateOTP(request.Email, request.Password);
 
-                return Ok(new { message = otp.Token });
+                return Ok(new ApiResponse<string>(200, ResponseKeys.OtpSentSuccessfully, otp.Token));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
             }
         }
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOTP( string OTPCode, string token)
+        public async Task<IActionResult> VerifyOTP(string OTPCode, string token)
         {
             try
             {
                 var otp = await _authService.VerifyOTP(OTPCode, token);
                 if (otp == null)
                 {
-                    return BadRequest(new { message = "OTP không hợp lệ." });
+                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.OtpInvalid, "OTP is not valid"));
                 }
 
                 if (otp.ExpireTime <= DateTime.Now)
                 {
-                    return BadRequest(new { message = "OTP đã hết hạn." });
+                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.OtpExpired, "OTP has expired."));
                 }
 
-                return Ok(new { message = "Xác thực thành công! Tài khoản đã được tạo." });
-            }       
+                return Ok(new ApiResponse<string>(400, ResponseKeys.AccountCreated, "Authentication successful! Account has been created"));
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
             }
         }
 
@@ -112,9 +112,10 @@ namespace EventMate_WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
             }
-        }
 
+        }
     }
+
 }

@@ -23,8 +23,8 @@ namespace Eventmate_Common.Helpers
         {
             using (Aes aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(_key.PadRight(32, '0').Substring(0, 32)); // Đảm bảo 32 bytes cho AES-256
-                aes.IV = Encoding.UTF8.GetBytes("EventMateSecure1".Substring(0, 16)); // Đảm bảo 16 bytes cho IV
+                aes.Key = Encoding.UTF8.GetBytes(_key.PadRight(32, '0').Substring(0, 32));
+                aes.IV = Encoding.UTF8.GetBytes(_iv.Substring(0, 16)); 
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
 
@@ -42,8 +42,8 @@ namespace Eventmate_Common.Helpers
         {
             using (Aes aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(_key);
-                aes.IV = Encoding.UTF8.GetBytes(_iv);
+                aes.Key = Encoding.UTF8.GetBytes(_key.PadRight(32, '0').Substring(0, 32));
+                aes.IV = Encoding.UTF8.GetBytes(_iv.Substring(0, 16));
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
 
