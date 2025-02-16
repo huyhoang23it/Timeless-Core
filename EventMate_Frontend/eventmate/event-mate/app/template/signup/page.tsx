@@ -8,11 +8,12 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<{ username?: string; email?: string; password?: string; confirmPassword?: string }>({});
+  const [agree, setAgree] = useState(false);
+  const [error, setError] = useState<{ username?: string; email?: string; password?: string; confirmPassword?: string; agree?: string }>({});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let newError: { username?: string; email?: string; password?: string; confirmPassword?: string } = {};
+    let newError: { username?: string; email?: string; password?: string; confirmPassword?: string; agree?: string } = {};
 
     if (!username || username.length < 3) {
       newError.username = "⚠ Username must be at least 3 characters";
@@ -26,6 +27,9 @@ export default function SignUpPage() {
     if (password !== confirmPassword) {
       newError.confirmPassword = "⚠ Passwords do not match";
     }
+    if (!agree) {
+      newError.agree = "⚠ You must read and agree to the terms";
+    }
 
     setError(newError);
 
@@ -37,7 +41,7 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/bg-01.jpg')" }}>
-      
+
       {/* Container chính với hiệu ứng scale */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -117,6 +121,30 @@ export default function SignUpPage() {
                 focus:ring-2 focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm`}
             />
             {error.confirmPassword && <p className="text-red-500 text-sm mt-1">{error.confirmPassword}</p>}
+          </motion.div>
+
+          <motion.div className="relative mt-4" whileFocus={{ scale: 1.05 }}>
+            <input
+              type="checkbox"
+              id="agree"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="agree" className="text-gray-700 text-sm cursor-pointer">
+              I agree to
+              <a
+                href="#"
+                className="relative text-blue-600 font-medium transition-all duration-300 ml-1
+        before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
+        before:bg-blue-600 before:transition-all before:duration-300 
+        hover:text-blue-700 hover:before:w-full hover:before:left-0 
+        hover:scale-105"
+              >
+                Event Mate's terms
+              </a>
+            </label>
+            {error.agree && <p className="text-red-500 text-sm mt-1">{error.agree}</p>}
           </motion.div>
 
           {/* Nút Sign Up */}

@@ -11,6 +11,7 @@ export default function SignUpEventOrganizer() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [businessLicense, setBusinessLicense] = useState<File | null>(null);
+  const [agree, setAgree] = useState(false);
 
   // Thêm trường lỗi
   const [error, setError] = useState<{
@@ -21,6 +22,7 @@ export default function SignUpEventOrganizer() {
     password?: string;
     confirmPassword?: string;
     businessLicense?: string;
+    agree?: string;
   }>({});
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,6 +36,7 @@ export default function SignUpEventOrganizer() {
       password?: string;
       confirmPassword?: string;
       businessLicense?: string;
+      agree?: string;
     } = {};
 
     // Kiểm tra username
@@ -63,6 +66,9 @@ export default function SignUpEventOrganizer() {
     // Kiểm tra businessLicense
     if (!businessLicense) {
       newError.businessLicense = "⚠ Business license is required";
+    }
+    if (!agree) {
+      newError.agree = "⚠ You must agree to the terms";
     }
 
     setError(newError);
@@ -304,6 +310,30 @@ export default function SignUpEventOrganizer() {
               </div>
             </div>
           </div>
+
+          <motion.div className="relative mt-4" whileFocus={{ scale: 1.05 }}>
+            <input
+              type="checkbox"
+              id="agree"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="agree" className="text-gray-700 text-sm cursor-pointer">
+              I agree to
+              <a
+                href="#"
+                className="relative text-blue-600 font-medium transition-all duration-300 ml-1
+        before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
+        before:bg-blue-600 before:transition-all before:duration-300 
+        hover:text-blue-700 hover:before:w-full hover:before:left-0 
+        hover:scale-105"
+              >
+                Event Mate's terms
+              </a>
+            </label>
+            {error.agree && <p className="text-red-500 text-sm mt-1">{error.agree}</p>}
+          </motion.div>
 
           {/* Nút Sign Up */}
           <motion.button
