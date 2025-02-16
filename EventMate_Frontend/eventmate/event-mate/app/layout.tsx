@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -7,6 +7,7 @@ import ReactPortal from "@/components/basic/ReactPortal";
 import { cssTransition, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SessionWrapper from "@/providers/SessionWrapper";
+import UserProvider from "@/providers/UserProvider";
 
 const customTransition = cssTransition({
   enter: 'custom-enter',
@@ -29,31 +30,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-  
-      <html lang="en">
+
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-         <SessionWrapper>
-          <LanguageProvider>
-            <ReactPortal wrapperId="global-toast-wrapper">
-            {children}
-                                        <ToastContainer
-                                            transition={customTransition}
-                                            limit={1}
-                                            position={'top-left'}
-                                            theme="colored"
-                                            className="display-linebreak"
-                                            draggable={false}
-                                            closeButton={false}
-                                            hideProgressBar={true}
-                                        />
-                                    </ReactPortal></LanguageProvider>
-                                    </SessionWrapper>
-       
+        <SessionWrapper>
+          <UserProvider>
+            <LanguageProvider>
+              <ReactPortal wrapperId="global-toast-wrapper">
+                {children}
+                <ToastContainer
+                  transition={customTransition}
+                  limit={1}
+                  position={'top-left'}
+                  theme="colored"
+                  className="display-linebreak"
+                  draggable={false}
+                  closeButton={false}
+                  hideProgressBar={true}
+                />
+              </ReactPortal></LanguageProvider>
+          </UserProvider>
+        </SessionWrapper>
+
       </body>
     </html>
- 
-    
+
+
   );
 }
