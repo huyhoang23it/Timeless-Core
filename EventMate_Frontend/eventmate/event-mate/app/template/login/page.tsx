@@ -49,10 +49,12 @@ export default function LoginPage() {
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
-      text-lg font-semibold text-gray-900 bg-white/90 
-      transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 
-      focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm focus:placeholder-opacity-50"
+              whileFocus={{ scale: 1.05 }}
+              className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
+                text-lg font-semibold text-gray-900 bg-white/90 
+                transition-all duration-300 focus:ring-2 
+                ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"} 
+                focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm focus:placeholder-opacity-50`}
             />
           </motion.div>
 
@@ -64,6 +66,7 @@ export default function LoginPage() {
               placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              whileFocus={{ scale: 1.05 }}
               className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
       text-lg font-semibold text-gray-900 bg-white/90 
       transition-all duration-300 focus:ring-2 
@@ -79,7 +82,7 @@ export default function LoginPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                ⚠ Incorrect Password
+                ⚠ Incorrect Email Or Password
               </motion.p>
             )}
           </motion.div>

@@ -5,21 +5,22 @@ import { motion } from "framer-motion"; // Import thư viện animation
 
 export default function ConfirmOtpPage() {
   const [otp, setOtp] = useState("");
-
-  const [error, setError] = useState<{ otp?: string}>({});
+  const [error, setError] = useState<{ otp?: string }>({});
+  const [shake, setShake] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let newError: { otp?: string} = {};
+    let newError: { otp?: string } = {};
 
-    if (!otp || !(otp.length == 6)) {
-      newError.otp = "⚠ OTP must has 6 numbers";
+    if (!otp || otp.length !== 6 || !/^[0-9]+$/.test(otp)) {
+      newError.otp = "⚠ OTP must be a 6-digit number";
     }
 
     setError(newError);
 
-    if (Object.keys(newError).length === 0) {
-      console.log("Forgot Pasword:", { otp });
+    if (Object.keys(newError).length > 0) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500); // Dừng hiệu ứng sau 0.5s
     }
   };
 
@@ -27,50 +28,44 @@ export default function ConfirmOtpPage() {
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/bg-01.jpg')" }}>
 
-      {/* Container chính với hiệu ứng scale */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="bg-white/80 backdrop-blur-lg shadow-xl rounded-xl px-8 py-10 w-full max-w-md mx-4"
       >
-        {/* Tiêu đề */}
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Enter OTP Code Sent To Your Email</h2>
 
-        {/* Form đăng ký */}
         <motion.form
           onSubmit={handleSubmit}
           className="space-y-5"
-          animate={Object.keys(error).length > 0 ? { x: [-10, 10, -10, 10, 0] } : {}}
+          animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}}
           transition={{ duration: 0.2 }}
         >
-          {/* Input OTP */}
-          <motion.div className="relative" whileFocus={{ scale: 1.05 }}>
+          <div className="relative">
             <label className="block mb-1 font-medium text-gray-700">Enter OTP</label>
             <motion.input
               type="text"
               placeholder="OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold text-gray-900 bg-white/90 transition-all duration-300 
-                ${error.otp ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"} 
-                focus:ring-2 focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm`}
+              whileFocus={{ scale: 1.05 }}
+              className={`w-full rounded-md border px-4 py-2 outline-none text-lg text-gray-900 bg-white/90 transition-all duration-300 
+                ${error.otp ? "border-red-500" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"}`}
             />
             {error.otp && <p className="text-red-500 text-sm mt-1">{error.otp}</p>}
-          </motion.div>
+          </div>
 
-          {/* Nút Sign Up */}
           <motion.button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold transition-all duration-300
                       hover:bg-blue-700 hover:shadow-lg hover:scale-105"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
-            Cornfirm
+            Confirm
           </motion.button>
         </motion.form>
 
-        {/* Điều hướng đến Login */}
         <div className="text-center mt-4">
           <p className="text-gray-600">
             Remember password? {" "}

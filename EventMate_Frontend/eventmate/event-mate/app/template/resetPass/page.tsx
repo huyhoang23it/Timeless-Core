@@ -7,6 +7,7 @@ export default function ResetPassPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<{ password?: string; confirmPassword?: string }>({});
+  const [isShaking, setIsShaking] = useState(false); // State để kích hoạt hiệu ứng rung
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,21 +16,30 @@ export default function ResetPassPage() {
     if (password.length < 6) {
       newError.password = "⚠ Password must be at least 6 characters";
     }
+    if (confirmPassword.length < 6) {
+      newError.confirmPassword = "⚠ Confirm Password must be at least 6 characters";
+    }
     if (password !== confirmPassword) {
       newError.confirmPassword = "⚠ Passwords do not match";
     }
 
     setError(newError);
 
-    if (Object.keys(newError).length === 0) {
-      console.log("Forgot Pasword:", { password });
+    // Nếu có lỗi, kích hoạt hiệu ứng rung
+    if (Object.keys(newError).length > 0) {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500); // Dừng rung sau 0.5s
+      return;
     }
+
+    console.log("Reset Password:", { password });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/bg-01.jpg')" }}>
-
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/bg-01.jpg')" }}
+    >
       {/* Container chính với hiệu ứng scale */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -44,7 +54,7 @@ export default function ResetPassPage() {
         <motion.form
           onSubmit={handleSubmit}
           className="space-y-5"
-          animate={Object.keys(error).length > 0 ? { x: [-10, 10, -10, 10, 0] } : {}}
+          animate={isShaking ? { x: [-10, 10, -10, 10, 0] } : {}}
           transition={{ duration: 0.2 }}
         >
           {/* Input Password */}
@@ -55,8 +65,12 @@ export default function ResetPassPage() {
               placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
-                ${error.password ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"} 
+              className={`w-full rounded-md border px-4 py-2 text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
+                ${
+                  error.password
+                    ? "border-red-500 focus:ring-red-400"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"
+                } 
                 focus:ring-2 focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm`}
             />
             {error.password && <p className="text-red-500 text-sm mt-1">{error.password}</p>}
@@ -70,28 +84,32 @@ export default function ResetPassPage() {
               placeholder="Confirm your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
-                ${error.confirmPassword ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"} 
+              className={`w-full rounded-md border px-4 py-2 text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
+                ${
+                  error.confirmPassword
+                    ? "border-red-500 focus:ring-red-400"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"
+                } 
                 focus:ring-2 focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm`}
             />
             {error.confirmPassword && <p className="text-red-500 text-sm mt-1">{error.confirmPassword}</p>}
           </motion.div>
 
-          {/* Nút Sign Up */}
+          {/* Nút Submit */}
           <motion.button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold transition-all duration-300
                       hover:bg-blue-700 hover:shadow-lg hover:scale-105"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(0, 0, 255, 0.3)" }}
           >
-            Cornfirm
+            Confirm
           </motion.button>
         </motion.form>
 
         {/* Điều hướng đến Login */}
         <div className="text-center mt-4">
           <p className="text-gray-600">
-            Remember password? {" "}
+            Remember password?{" "}
             <a
               href="#"
               className="relative text-blue-600 font-medium transition-all duration-300 ml-1

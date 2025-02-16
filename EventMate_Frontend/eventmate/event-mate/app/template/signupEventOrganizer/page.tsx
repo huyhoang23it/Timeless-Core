@@ -116,6 +116,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold text-gray-900 bg-white/90 transition-all duration-300
                     ${error.username
                       ? "border-red-500 focus:ring-red-400"
@@ -136,6 +137,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
                     ${error.email
                       ? "border-red-500 focus:ring-red-400"
@@ -156,6 +158,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
                     ${error.password
                       ? "border-red-500 focus:ring-red-400"
@@ -178,6 +181,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
                     ${error.confirmPassword
                       ? "border-red-500 focus:ring-red-400"
@@ -203,6 +207,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Your company name"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold text-gray-900 bg-white/90 transition-all duration-300
                     ${error.companyName
                       ? "border-red-500 focus:ring-red-400"
@@ -225,6 +230,7 @@ export default function SignUpEventOrganizer() {
                   placeholder="Your phone number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                  whileFocus={{ scale: 1.05 }}
                   className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold text-gray-900 bg-white/90 transition-all duration-300
                     ${error.phoneNumber
                       ? "border-red-500 focus:ring-red-400"

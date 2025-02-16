@@ -11,7 +11,9 @@ export default function ForgotPassPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let newError: { email?: string } = {};
-
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newError.email = "⚠ Please enter a valid email address";
+    }
     setError(newError);
 
     if (Object.keys(newError).length === 0) {
@@ -37,8 +39,10 @@ export default function ForgotPassPage() {
         <motion.form
           onSubmit={handleSubmit}
           className="space-y-5"
-          animate={Object.keys(error).length > 0 ? { x: [-10, 10, -10, 10, 0] } : {}}
-          transition={{ duration: 0.2 }}
+          key={Object.keys(error).length > 0 ? "error" : "normal"} // Thay đổi key để reset animation
+          initial={{ x: 0 }}
+          animate={Object.keys(error).length > 0 ? { x: [-5, 5, -5, 5, 0] } : {}}
+          transition={{ duration: 0.3 }}
         >
           {/* Input Email */}
           <motion.div className="relative" whileFocus={{ scale: 1.05 }}>
@@ -48,6 +52,7 @@ export default function ForgotPassPage() {
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              whileFocus={{ scale: 1.05 }}
               className="w-full rounded-md border border-gray-400 px-4 py-2 outline-none 
       text-lg font-semibold text-gray-900 bg-white/90 
       transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 
