@@ -126,7 +126,7 @@ export const useApiResponseToastStore = create<ApiResponseToastStore>()(
                             }, delayBetweenToasts);
 
                             set((state) => {
-                                state.apiBatch = state.apiBatch.map((api: { responseKey: string; remainingApiCallResponseWaiting: number; }) =>
+                                state.apiBatch = state.apiBatch.map((api: queuedApiCall) =>
                                     api.responseKey === messageKey
                                         ? {
                                               ...api,
@@ -170,7 +170,7 @@ export const useApiResponseToastStore = create<ApiResponseToastStore>()(
                     if (apiCall) {
                         if (!apiCall.hasToastedError) {
                             set((state) => {
-                                state.apiBatch = state.apiBatch.map((api: { responseKey: string; }) =>
+                                state.apiBatch = state.apiBatch.map((api: queuedApiCall) =>
                                     api.responseKey === messageKey
                                         ? { ...api, hasToastedError: true }
                                         : api
@@ -180,7 +180,7 @@ export const useApiResponseToastStore = create<ApiResponseToastStore>()(
                         }
                         // even if the error has been toasted, we still need to decrease the remaining response
                         set((state) => {
-                            state.apiBatch = state.apiBatch.map((api: { responseKey: string; remainingApiCallResponseWaiting: number; }) =>
+                            state.apiBatch = state.apiBatch.map((api: queuedApiCall) =>
                                 api.responseKey === messageKey
                                     ? {
                                           ...api,

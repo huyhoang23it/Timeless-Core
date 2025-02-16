@@ -1,3 +1,4 @@
+"use client";
 import React, { MouseEvent, useState } from 'react';
 import classNames from '@/ultilities/common/classNames';
 

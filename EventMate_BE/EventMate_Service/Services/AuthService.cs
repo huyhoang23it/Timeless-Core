@@ -36,25 +36,25 @@ namespace EventMate_Service.Services
             _AESHelper = AESHelper;
         }
 
-        public async Task<string> LoginAsync(User userMapper)
+        public async Task<User> LoginAsync(User userMapper)
         {
 
             //Check email and pass
             var user = await authRepository.IsValidUser(userMapper.Email, userMapper.Password);
 
-            return await CreateToken(user);
+            return user;
 
         }
-        public async Task<string> Login_GoogleAsync(string email, string googleID)
+        public async Task<User> Login_GoogleAsync(string email, string googleID)
         {
 
             //Check email and googleID
             var user = await authRepository.Login_Google(email, googleID);
 
-            return await CreateToken(user);
+            return user;
 
         }
-        private async Task<string> CreateToken(User? user)
+        public async Task<string?> CreateToken(User? user)
         {
             if (user == null) return string.Empty;
             if (user.Status == UserStatus.Inactive) return "Inactive";
@@ -80,11 +80,9 @@ namespace EventMate_Service.Services
             ////Create token
             var token = jwtService.GenerateTokenLogin(authClaims);
 
-
-
             return token;
         }
-        public async Task<string> CreateNewAccount(User user)
+        public async Task<User> CreateNewAccount(User user)
         {
             try
             {
@@ -107,8 +105,8 @@ namespace EventMate_Service.Services
                 // SignUp new User
                 await authRepository.SignUp(user);
 
-                // Create and gen token
-                return await CreateToken(user);
+                return user;
+
             }
             catch(Exception ex)
             {

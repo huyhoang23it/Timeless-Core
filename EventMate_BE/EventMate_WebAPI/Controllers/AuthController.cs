@@ -3,9 +3,10 @@ using EventMate_Common.Common;
 using EventMate_Common.Status;
 using EventMate_Data.Entities;
 using EventMate_Service.Services;
-using EventMate_WebAPI.ModelsMapping;
+using EventMate_WebAPI.ModelsMapping.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Runtime.InteropServices;
 using static System.Net.WebRequestMethods;
 
@@ -33,27 +34,58 @@ namespace EventMate_WebAPI.Controllers
                     return BadRequest(new ApiResponse<string>(400, ResponseKeys.InvalidRequest, "Dữ liệu không hợp lệ."));
                 }
 
-                var user = _mapper.Map<User>(model);
+                var userRequest = _mapper.Map<User>(model);
 
-                var token = await _authService.LoginAsync(user);
+                var user = await _authService.LoginAsync(userRequest);
 
-                if (string.IsNullOrEmpty(token))
+                if (user == null)
                 {
                     return Unauthorized(new ApiResponse<string>(401, ResponseKeys.InvalidCredentials, "Email hoặc mật khẩu không chính xác."));
                 }
-                else if (token.Equals(UserStatus.Inactive))
+                else if (user.Status.Equals(UserStatus.Inactive))
                 {
                     return Unauthorized(new ApiResponse<string>(403, ResponseKeys.AccountDisabled, "Tài khoản của bạn đã bị vô hiệu hóa. Liên hệ hỗ trợ để được giúp đỡ."));
                 }
 
-                return Ok(new ApiResponse<string>(200, ResponseKeys.LoginSuccess, token));
+              var token =  _authService.CreateToken(user);
+                var userResponse = _mapper.Map<UserResponse>(user);
+                return Ok(new ApiResponse<object>(200, ResponseKeys.LoginSuccess, new {user = userResponse,token = token?.Result }));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
             }
         }
+        [HttpPost("login-google")]
+        public async Task<IActionResult> Login_Google(LoginGoogleModel loginGoogle)
+        {
+            try
+            {
+                IActionResult response;
+                // Check if the account exists using email and Google ID
+                var user = await _authService.Login_GoogleAsync(loginGoogle.Email, loginGoogle.GoogleId);
 
+                if (user == null)
+                {
+                    // Map the LoginGoogleModel to a User entity
+                    var newUser = _mapper.Map<User>(loginGoogle);
+                    newUser.Password = "1@113$2aMGs";
+                    // Create a new account
+                    user = await _authService.CreateNewAccount(newUser);
+                }
+
+                // Return the generated token
+                var token = _authService.CreateToken(user);
+                var userResponse = _mapper.Map<UserResponse>(user);
+                return Ok(new ApiResponse<object>(200, ResponseKeys.LoginSuccess, new { user = userResponse, token = token?.Result }));
+
+            }
+            catch (Exception ex)
+            {
+                // Return a 500 Internal Server Error with a custom error message
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
         [HttpPost("create-otp")]
         public async Task<IActionResult> CreateOTP(OTPRequest request)
         {

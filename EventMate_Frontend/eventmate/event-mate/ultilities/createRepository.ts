@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useApiResponseToastStore } from '@/store/apiResponseToastStore';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Agent } from 'https';
 import { mapValues } from 'lodash';
+import { getAuthInfo } from './auth';
 
 
 
@@ -27,7 +29,7 @@ type CreateRepositoryOutput<
 export default function createRepository<Input extends CreateRepositoryInput>(
     input: Input
 ): CreateRepositoryOutput<Input> {
-    return mapValues(input, (resourceCreator) => {
+    return mapValues(input, (resourceCreator: InputFunction<any, any>) => {
         return (...args: any[]) => {
             return resourceCreator(fetcher, ...args);
         };
@@ -42,12 +44,15 @@ const axiosInstance = axios.create({
 
 const responseHandler = (response: any) => {
     // format response: {key: string, body: any}
-   
+    const { toastSuccess } = useApiResponseToastStore.getState().actions;
+    const messageKey = response.data?.key;
+    toastSuccess(messageKey);
     return {
         ...response,
-        data: response?.token,
+        data: response.data?.data,
     };
 };
+
 
 // config reasponse handler
 axiosInstance.interceptors.response.use(responseHandler, null);
@@ -58,7 +63,8 @@ export const fetcher = <ResponseData = any>(
     url: string,
     config?: AxiosRequestConfig
 ): Promise<RequestResponse<ResponseData>> => {
-  
+    const { toastError } = useApiResponseToastStore.getState().actions;
+    const session = getAuthInfo();
     return axiosInstance
         .request<ResponseData>({
             ...config,
@@ -69,11 +75,16 @@ export const fetcher = <ResponseData = any>(
             },
             headers: {
                 ...config?.headers,
-                Authorization: `Bearer ${localStorage.getItem('token')}` || '',
+                Authorization: `Bearer ${session?.token}` || '',
             },
-     
+
         })
         .catch((error: any) => {
+            const showMessage = true;
+            const responseKey = error?.response?.data?.key;
+            if (showMessage && responseKey) {
+                toastError(responseKey);
+            }
             return {
                 ...error.response,
                 error,

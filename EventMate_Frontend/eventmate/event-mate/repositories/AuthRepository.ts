@@ -14,7 +14,7 @@ export const AuthRepository = createRepository({
   },
 
   getNew: async (fetch) => {
-    const response = await fetch("https://localhost:7121/api/News", {
+    const response = await fetch("https://localhost:7227/api/News", {
       method: "GET",
     });
     return response;

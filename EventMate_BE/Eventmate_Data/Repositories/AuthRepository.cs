@@ -27,7 +27,7 @@ namespace EventMate_Data.Repositories
             try
             {
     
-                var user = await _context.Users!.FirstOrDefaultAsync(u => u.Email == email);
+                var user = await _context.Users!.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
                 return null;
@@ -74,7 +74,7 @@ namespace EventMate_Data.Repositories
         {
             try
             {
-                var user = await _context.Users!.FirstOrDefaultAsync(u => u.Email == email && u.GoogleId == googleId);
+                var user = await _context.Users!.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email && u.GoogleId == googleId);
             if (user != null)
             {
                 return user;

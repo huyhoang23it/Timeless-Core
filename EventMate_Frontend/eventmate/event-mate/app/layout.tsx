@@ -1,11 +1,12 @@
 "use client"; 
-import type { Metadata } from "next";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LanguageProvider from "@/providers/LanguageProvider";
 import ReactPortal from "@/components/basic/ReactPortal";
 import { cssTransition, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import SessionWrapper from "@/providers/SessionWrapper";
 
 const customTransition = cssTransition({
   enter: 'custom-enter',
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+         <SessionWrapper>
           <LanguageProvider>
             <ReactPortal wrapperId="global-toast-wrapper">
             {children}
@@ -47,6 +49,7 @@ export default function RootLayout({
                                             hideProgressBar={true}
                                         />
                                     </ReactPortal></LanguageProvider>
+                                    </SessionWrapper>
        
       </body>
     </html>

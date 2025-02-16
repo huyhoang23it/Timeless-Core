@@ -43,8 +43,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
+
+app.UseCors("reactApp");
 app.MapControllers();
 
 app.Run();

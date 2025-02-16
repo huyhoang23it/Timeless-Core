@@ -1,4 +1,4 @@
-﻿namespace EventMate_WebAPI.ModelsMapping
+﻿namespace EventMate_WebAPI.ModelsMapping.Authentication
 {
     public class SignUpModel
     {
