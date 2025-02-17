@@ -19,7 +19,7 @@ declare module "next-auth" {
 
 const handler = NextAuth({
   session: { strategy: "jwt" },
-  secret: "NEXTAUTH_SECRET",
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -40,13 +40,13 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        // Danh sách tài khoản mẫu
+
         if (!credentials) {
           return null;
         }
 
         const agent = new Agent({ rejectUnauthorized: false });
-        const res = await axios.post("https://localhost:7121/api/Auth/login", { email: 'string', password: 'string' }, { httpsAgent: agent });
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/login`, { email: credentials.email, password: credentials.password }, { httpsAgent: agent });
         const user = res.data.data.user;
         return {
           id: user.userId,
@@ -66,7 +66,7 @@ const handler = NextAuth({
               try {
                 const agent = new Agent({ rejectUnauthorized: false });
                 const res = await axios.post(
-                  "https://localhost:7121/api/Auth/login-google",
+                  `${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/login-google`,
                   {
                     googleId: profile.sub, 
                     fullName: profile.name,

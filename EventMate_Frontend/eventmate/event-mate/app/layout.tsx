@@ -7,6 +7,7 @@ import ReactPortal from "@/components/basic/ReactPortal";
 import { cssTransition, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SessionWrapper from "@/providers/SessionWrapper";
+import UserProvider from "@/providers/UserProvider";
 
 const customTransition = cssTransition({
   enter: 'custom-enter',
@@ -35,7 +36,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
          <SessionWrapper>
+        
           <LanguageProvider>
+          <UserProvider>
             <ReactPortal wrapperId="global-toast-wrapper">
             {children}
                                         <ToastContainer
@@ -48,7 +51,9 @@ export default function RootLayout({
                                             closeButton={false}
                                             hideProgressBar={true}
                                         />
-                                    </ReactPortal></LanguageProvider>
+                                    </ReactPortal>
+                                    </UserProvider></LanguageProvider>
+                                   
                                     </SessionWrapper>
        
       </body>

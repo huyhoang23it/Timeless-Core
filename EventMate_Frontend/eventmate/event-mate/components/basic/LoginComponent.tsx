@@ -6,12 +6,12 @@ import { signIn, useSession } from "next-auth/react";
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-  const {data: session} =   useSession(); 
+    const { data, status } = useSession();
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       await signIn("credentials", { email, password, redirect: false });
     };
-  console.log(session?.user?.token);
+  console.log(data , status);
 
     return (
       <div>

@@ -4,6 +4,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Agent } from 'https';
 import { mapValues } from 'lodash';
 import { getAuthInfo } from './auth';
+import { PUB_TOPIC } from '@/constants/pubTopic';
+import { ERROR_CODE } from '@/constants/httpResponse';
 
 
 
@@ -75,13 +77,16 @@ export const fetcher = <ResponseData = any>(
             },
             headers: {
                 ...config?.headers,
-                Authorization: `Bearer ${session?.token}` || '',
+                Authorization: `Bearer ${session?.user.token}` || '',
             },
 
         })
         .catch((error: any) => {
             const showMessage = true;
             const responseKey = error?.response?.data?.key;
+            if (error?.response?.status == ERROR_CODE.UNAUTHORIZED) {
+                PubSub.publish(PUB_TOPIC.UNAUTHORIZED_REQUEST);
+            }
             if (showMessage && responseKey) {
                 toastError(responseKey);
             }

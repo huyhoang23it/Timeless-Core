@@ -1,7 +1,7 @@
 import { KEY_AUTH_TOKEN } from "@/constants/constant";
 import { AES, enc } from 'crypto-js';
 
-const SECRET = 'EVENTMATE@SEB';
+const SECRET = 'EVENTMATE@2025';
 export function getAuthInfo() {
     try {
         const authToken = localStorage.getItem(KEY_AUTH_TOKEN);
