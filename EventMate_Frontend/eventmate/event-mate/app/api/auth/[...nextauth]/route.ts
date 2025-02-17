@@ -1,5 +1,5 @@
 
-import NextAuth  from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from 'axios';
 import { Agent } from 'https';
@@ -60,47 +60,48 @@ const handler = NextAuth({
 
     })
   ],
-
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // Nếu đăng nhập bằng Google, gọi API backend để lấy token riêng
       if (account?.provider === "google" && profile) {
-        try {
-          const agent = new Agent({ rejectUnauthorized: false });
-          const res = await axios.post(
-            "https://localhost:7121/api/Auth/login-google",
-            {
-              googleId: profile.sub, 
-              fullName: profile.name,
-              email: profile.email,
-              avatar: profile.picture
-            },
-            { httpsAgent: agent }
-          );
-          const userData = res.data.data.user;
-          token.id = userData.userId;
-          token.email = userData.email;
-          token.name = userData.fullName;
-          token.role = userData.role;
-          token.avatar = userData.avatar;
-          token.token = res.data.data.token; 
-          return token;
-        } catch (error) {
-          console.error("Error authenticating with backend:", error);
-        }
-      }
-  
+              try {
+                const agent = new Agent({ rejectUnauthorized: false });
+                const res = await axios.post(
+                  "https://localhost:7121/api/Auth/login-google",
+                  {
+                    googleId: profile.sub, 
+                    fullName: profile.name,
+                    email: profile.email,
+                    avatar: profile.picture
+                  },
+                  { httpsAgent: agent }
+                );
+                const userData = res.data.data.user;
+                token.id = userData.userId;
+                token.email = userData.email;
+                token.name = userData.fullName;
+                token.role = userData.role;
+                token.avatar = userData.avatar;
+                token.token = res.data.data.token; 
+                return token;
+              } catch (error) {
+                console.error("Error authenticating with backend:", error);
+              }
+            }
+      if (user){
         token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.role = user.role;
-        token.avatar = user.avatar;
-        token.token = user.token;
-
+              token.email = user.email;
+              token.name = user.name;
+              token.role = user.role;
+              token.avatar = user.avatar;
+              token.token = user.token;
+      
+            return token;
+     
+      } 
       return token;
     },
-  
-    async session({ session, token }) {
+      async session({ session, token }) {
+       
       if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
@@ -109,6 +110,7 @@ const handler = NextAuth({
         session.user.avatar = token.avatar as string;
         session.user.token = token.token as string;
       }
+      
       return session;
     }
   },
