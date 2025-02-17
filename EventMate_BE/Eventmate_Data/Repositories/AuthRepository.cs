@@ -26,19 +26,19 @@ namespace EventMate_Data.Repositories
         {
             try
             {
-    
-                var user = await _context.Users!.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return null;
-            }
-         
-            if (BCrypt.Net.BCrypt.Verify(password, user.Password))
-            {
-                return user; 
-            }
 
-            return null; 
+                var user = await _context.Users!.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+                {
+                    return user;
+                }
+
+                return null;
             }
             catch (Exception ex)
             {
@@ -51,35 +51,35 @@ namespace EventMate_Data.Repositories
             try
             {
                 if (_context.Users == null)
-            {
-                return string.Empty;
-            }
+                {
+                    return string.Empty;
+                }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return string.Empty;
-            }
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                if (user == null)
+                {
+                    return string.Empty;
+                }
 
-            var role = await _context.Role!.FirstOrDefaultAsync(r => r.RoleId == user.RoleId);
-            return role != null ? role.RoleName : string.Empty;
-        }
+                var role = await _context.Role!.FirstOrDefaultAsync(r => r.RoleId == user.RoleId);
+                return role != null ? role.RoleName : string.Empty;
+            }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-}
+        }
 
         public async Task<User?> Login_Google(string email, string googleId)
         {
             try
             {
                 var user = await _context.Users!.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email && u.GoogleId == googleId);
-            if (user != null)
-            {
-                return user;
-            }
-            return null;
+                if (user != null)
+                {
+                    return user;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -146,6 +146,53 @@ namespace EventMate_Data.Repositories
                 throw new Exception(ex.Message);
 
             }
+        }
+        public async Task SetToken(string email, string token)
+        {
+            try
+            {
+                var user = await _context.Users!.FirstOrDefaultAsync(u => u.Email == email);
+                if (user != null)
+                {
+                    user.TokenReset = token;
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+        }
+        public async Task ResetPassword(User user)
+        {
+            try
+            {
+                var userToUpdate = await _context.Users!.SingleOrDefaultAsync(u => u.Email == user.Email) ??
+                               throw new Exception("User not found");
+                userToUpdate.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                userToUpdate.TokenReset = null;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+        }
+        public async Task<string> GetToken(string email)
+        {
+            var user = await _context.Users!.FirstOrDefaultAsync(u => u.Email == email) ??
+                       throw new Exception("User not found");
+            return user.TokenReset!;
+        }
+        public async Task RemoveOTP(string otpCode)
+        {
+            var otp = _context.OTPAuthens.FirstOrDefaultAsync(o => o.OTPCode == otpCode);
+             _context.Remove(otp);
+            await _context.SaveChangesAsync();
+
+
         }
     }
 }

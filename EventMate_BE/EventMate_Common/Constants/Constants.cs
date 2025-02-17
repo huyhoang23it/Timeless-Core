@@ -9,6 +9,7 @@ namespace EventMate_Common.Constants
     public static  class Constants
     {
         public const string PasswordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-";
+
         public const string SubjectOTPEmail = "EventMate - Xác thực OTP";
         public static string OTPEmailBody = @"
         Chào bạn,
@@ -25,5 +26,9 @@ namespace EventMate_Common.Constants
         Event Mate Team
         https://eventmate.com
     ";
+        public const string SubjectResetPassEmail = "EventMate - Reset Password";
+        public const string BodyResetPassEmail = "We have just received a password reset request for {0}.<br><br>" +
+                                     "Please click <a href=\"{1}\">here</a> to reset your password.<br><br>" +
+                                     "For your security, the link will expire in 24 hours or immediately after you reset your password.";
     }
 }

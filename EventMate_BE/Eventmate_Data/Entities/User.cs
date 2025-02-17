@@ -24,6 +24,7 @@ namespace EventMate_Data.Entities
         public int? GroupSuccess {  get; set; }
 
         public string? Avatar { get; set; }
+        public string? TokenReset { get; set; }
 
         [Required]
         [EmailAddress]

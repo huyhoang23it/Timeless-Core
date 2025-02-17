@@ -17,7 +17,7 @@ namespace EventMate_Service.Services
         {
             _config = config;
         }
-        public void SendEmail(string to, string subject,string body)
+        public async Task SendEmail(string to, string subject,string body)
         {
             var email = new MimeKit.MimeMessage();
             email.From.Add(MailboxAddress.Parse(_config["EmailSettings:Email"]));

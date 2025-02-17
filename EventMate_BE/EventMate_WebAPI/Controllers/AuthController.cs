@@ -148,6 +148,97 @@ namespace EventMate_WebAPI.Controllers
             }
 
         }
+
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            try
+            {
+                IActionResult response;
+
+                var isUser = await _authService.IsExistUser(email);
+
+                if (!isUser)
+                {
+                    return NotFound(new ApiResponse<string>(404, ResponseKeys.EmailNotFound, "Email Not Found"));
+                }
+                else
+                {
+
+                   await _authService.SendResetPasswordEmail(email);
+                    return Ok(new ApiResponse<string>(200, ResponseKeys.EmailSent, "Email sent"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            try
+            {
+
+                // Check for null values in model properties
+                if (string.IsNullOrEmpty(model.Password) || string.IsNullOrEmpty(model.Token))
+                return BadRequest(new ApiResponse<string>(404, ResponseKeys.EmailNotFound, "Password and token cannot be empty"));
+            
+
+                // Attempt to reset password
+                var user = await _authService.GetUserByToken(model.Token);
+                if (user == null) return NotFound(new ApiResponse<string>(404, ResponseKeys.EmailNotFound, "Email Not Found"));
+                if (user.TokenReset == null) return BadRequest(new ApiResponse<string>(400, ResponseKeys.TokenNotFound, "Token Not Found"));
+                user.Password = model.Password;
+                await _authService.ChangePasswordAsync(user);
+                return Ok(new ApiResponse<string>(200, ResponseKeys.ResetPassSuccess, "Password reset successfully"));
+              
+            }
+            catch (SecurityTokenException ex)
+            {
+                return BadRequest(new ApiResponse<string>(400, ex.Message));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ApiResponse<string>(404, ex.Message));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ApiResponse<string>(400, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
+            }
+        }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(model.NewPassword) || string.IsNullOrEmpty(model.OldPassword) || string.IsNullOrEmpty(model.Token))
+                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.PasswordNotNull, "Password and token cannot be empty"));
+
+                var user = await _authService.GetUserByToken(model.Token);
+                if (user == null) return NotFound(new ApiResponse<string>(404, ResponseKeys.EmailNotFound, "Email Not Found"));
+                var checkpass = _authService.VerifyPassword( model.OldPassword, user.Password);
+                if (checkpass == false) return BadRequest(new ApiResponse<string>(400, ResponseKeys.OldPassIncorrect, "Old password is incorrect"));
+                //Check old and new pass are null
+                user.Password = model.NewPassword;
+                await _authService.ChangePasswordAsync(user);
+
+                return Ok(new ApiResponse<string>(200, ResponseKeys.ResetPassSuccess, "Password reset successfully"));
+            }
+            catch (Exception ex)
+            {
+                // Handle potential errors
+                return StatusCode(500, new ApiResponse<string>(500, ResponseKeys.ErrorSystem, ex.Message));
+            }
+
+        }
+
+
     }
 
 }

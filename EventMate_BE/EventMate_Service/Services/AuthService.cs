@@ -1,5 +1,6 @@
 ﻿
 using Eventmate_Common.Helpers;
+using EventMate_Common.Common;
 using EventMate_Common.Constants;
 using EventMate_Common.Status;
 using Eventmate_Data.Entities;
@@ -101,7 +102,7 @@ namespace EventMate_Service.Services
                 {
                     user.RoleId = roleId.Value;
                 }
-
+                
                 // SignUp new User
                 await authRepository.SignUp(user);
 
@@ -121,7 +122,7 @@ namespace EventMate_Service.Services
             var subject = Constants.SubjectOTPEmail;
             var body = string.Format(Constants.OTPEmailBody, OTPCode);
 
-            _emailService.SendEmail(email, subject, body);
+            await _emailService.SendEmail(email, subject, body);
         }
         public async Task<bool> IsExistUser(string email)
         {
@@ -156,6 +157,7 @@ namespace EventMate_Service.Services
                     Email = email,
                     Password = password,
                 };
+                //await authRepository.RemoveOTP(OTPCode);
                 await CreateNewAccount(user);
                 return otp;
             }
@@ -165,6 +167,132 @@ namespace EventMate_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        public async Task SendResetPasswordEmail(string userEmail)
+        {
+            try
+            {
+                var resetToken = GenerateToken(userEmail);
+                var baseurl = _configuration["AppSettings:BaseUrl"];
+                var resetUrl = $"{baseurl}/api/Auth/ResetPassword?token={resetToken}";
+                var subject = Constants.SubjectResetPassEmail;
+                var body = string.Format(Constants.BodyResetPassEmail, userEmail, resetToken);
+
+              await _emailService.SendEmail(userEmail, subject, body);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+        public async Task<User> GetUserByToken(string token)
+        {
+            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
+
+            if (JwtService.IsTokenExpired(token))
+            {
+                throw new Exception("Token expired");
+            }
+            var principal = jwtService.GetPrincipal(token) ?? throw new Exception("Invalid token");
+            var emailClaim = principal.FindFirst(ClaimTypes.Email) ?? throw new Exception("Email claim not found in token");
+
+            var email = emailClaim.Value;
+
+
+            //get user by email
+            var user = await authRepository.GetUserByEmail(email);
+            return user;
+
+        }
+        public bool VerifyPassword(string oldPassword, string tempPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(oldPassword, tempPassword);
+        }
+        public async Task ChangePasswordAsync(User user, string newPassword, string oldPassword)
+        {
+
+            try
+            {
+                await authRepository.ResetPassword(user);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public string GenerateToken(string email)
+        {
+            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
+            var token = jwtService.GenerateToken(email);
+            authRepository.SetToken(email, token);
+            return token;
+        }
+    
+        private async Task<string> ValidateToken(string token)
+        {
+            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
+
+            if (JwtService.IsTokenExpired(token))
+            {
+                throw new SecurityTokenException(ResponseKeys.TokenExpired);
+            }
+
+            var principal = jwtService.GetPrincipal(token);
+            if (principal == null)
+            {
+                throw new SecurityTokenException(ResponseKeys.InvalidToken);
+            }
+
+            var emailClaim = principal.FindFirst(ClaimTypes.Email);
+            if (emailClaim == null)
+            {
+                throw new InvalidOperationException(ResponseKeys.EmailClaimNotFound);
+            }
+
+            var email = emailClaim.Value;
+
+            var tokenFromDb = await authRepository.GetToken(email);
+            if (tokenFromDb == null)
+            {
+                throw new KeyNotFoundException(ResponseKeys.TokenNotFound);
+            }
+
+            if (tokenFromDb != token)
+            {
+                throw new UnauthorizedAccessException(ResponseKeys.InvalidToken);
+            }
+
+            return email;
+        }
+        public string GetEmailInToken(string token) {
+            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
+            if (JwtService.IsTokenExpired(token))
+            {
+                throw new Exception("Token expired");
+            }
+
+            var principal = jwtService.GetPrincipal(token) ?? throw new Exception("Invalid token");
+            var emailClaim = principal.FindFirst(ClaimTypes.Email) ?? throw new Exception("Email claim not found in token");
+
+            var email = emailClaim.Value;
+            return email;
+        }
+        
+        public async Task ChangePasswordAsync(User user)
+        {
+
+            try
+            {
+                //Reset pass
+                await authRepository.ResetPassword(user);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
 
 
     }
