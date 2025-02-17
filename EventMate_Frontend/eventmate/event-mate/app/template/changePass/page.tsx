@@ -54,7 +54,7 @@ export default function ChangePassPage() {
             <label className="block mb-1 font-medium text-gray-700">Old Password</label>
             <motion.input
               type="password"
-              placeholder="Your password"
+              placeholder="Your old password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
               whileFocus={{ scale: 1.05 }}
@@ -69,7 +69,7 @@ export default function ChangePassPage() {
             <label className="block mb-1 font-medium text-gray-700">New Password</label>
             <motion.input
               type="password"
-              placeholder="Your password"
+              placeholder="Your new password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               whileFocus={{ scale: 1.05 }}
@@ -83,7 +83,7 @@ export default function ChangePassPage() {
             <label className="block mb-1 font-medium text-gray-700">Confirm New Password</label>
             <motion.input
               type="password"
-              placeholder="Confirm your password"
+              placeholder="Confirm your new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               whileFocus={{ scale: 1.05 }}

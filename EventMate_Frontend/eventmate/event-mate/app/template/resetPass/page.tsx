@@ -16,9 +16,6 @@ export default function ResetPassPage() {
     if (password.length < 6) {
       newError.password = "⚠ Password must be at least 6 characters";
     }
-    if (confirmPassword.length < 6) {
-      newError.confirmPassword = "⚠ Confirm Password must be at least 6 characters";
-    }
     if (password !== confirmPassword) {
       newError.confirmPassword = "⚠ Passwords do not match";
     }
@@ -62,9 +59,10 @@ export default function ResetPassPage() {
             <label className="block mb-1 font-medium text-gray-700">Password</label>
             <motion.input
               type="password"
-              placeholder="Your password"
+              placeholder="Your new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              whileFocus={{ scale: 1.05 }}
               className={`w-full rounded-md border px-4 py-2 text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
                 ${
                   error.password
@@ -81,9 +79,10 @@ export default function ResetPassPage() {
             <label className="block mb-1 font-medium text-gray-700">Confirm Password</label>
             <motion.input
               type="password"
-              placeholder="Confirm your password"
+              placeholder="Confirm your new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              whileFocus={{ scale: 1.05 }}
               className={`w-full rounded-md border px-4 py-2 text-lg font-semibold bg-white/90 transition-all duration-300 text-gray-900
                 ${
                   error.confirmPassword

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion"; // Import thư viện animation
 
 export default function SignUpEventOrganizer() {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -15,7 +14,6 @@ export default function SignUpEventOrganizer() {
 
   // Thêm trường lỗi
   const [error, setError] = useState<{
-    username?: string;
     email?: string;
     companyName?: string;
     phoneNumber?: string;
@@ -29,7 +27,6 @@ export default function SignUpEventOrganizer() {
     e.preventDefault();
 
     let newError: {
-      username?: string;
       email?: string;
       companyName?: string;
       phoneNumber?: string;
@@ -39,10 +36,6 @@ export default function SignUpEventOrganizer() {
       agree?: string;
     } = {};
 
-    // Kiểm tra username
-    if (!username || username.length < 3) {
-      newError.username = "⚠ Username must be at least 3 characters";
-    }
     // Kiểm tra email
     if (!email) {
       newError.email = "⚠ Email is required";
@@ -68,7 +61,7 @@ export default function SignUpEventOrganizer() {
       newError.businessLicense = "⚠ Business license is required";
     }
     if (!agree) {
-      newError.agree = "⚠ You must agree to the terms";
+      newError.agree = "⚠ You must read and agree to the terms";
     }
 
     setError(newError);
@@ -76,7 +69,6 @@ export default function SignUpEventOrganizer() {
     // Nếu không có lỗi, ta sẽ submit form (ở đây chỉ console.log)
     if (Object.keys(newError).length === 0) {
       console.log("Event Organizer Signed Up:", {
-        username,
         email,
         companyName,
         phoneNumber,
@@ -113,27 +105,7 @@ export default function SignUpEventOrganizer() {
           {/* Chia form thành 2 cột */}
           <div className="flex flex-col md:flex-row md:space-x-6">
             {/* Cột trái */}
-            <div className="flex-1 space-y-5">
-              {/* Input Username */}
-              <motion.div className="relative" whileFocus={{ scale: 1.05 }}>
-                <label className="block mb-1 font-medium text-gray-700">Username</label>
-                <motion.input
-                  type="text"
-                  placeholder="Your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  whileFocus={{ scale: 1.05 }}
-                  className={`w-full rounded-md border border-gray-400 px-4 py-2 outline-none text-lg font-semibold text-gray-900 bg-white/90 transition-all duration-300
-                    ${error.username
-                      ? "border-red-500 focus:ring-red-400"
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-400"
-                    }
-                    focus:ring-2 focus:shadow-lg placeholder:text-gray-500 placeholder:text-sm`}
-                />
-                {error.username && (
-                  <p className="text-red-500 text-sm mt-1">{error.username}</p>
-                )}
-              </motion.div>
+            <div className="flex-1 space-y-5">           
 
               {/* Input Email */}
               <motion.div className="relative" whileFocus={{ scale: 1.05 }}>

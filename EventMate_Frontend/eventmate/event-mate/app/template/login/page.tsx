@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion"; // Import thư viện animation
-import { SiGmail } from "react-icons/si"; // Gmail không có icon chính thức trong Heroicons, nên dùng react-icons
+import { SiGoogle } from "react-icons/si";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -188,8 +188,8 @@ export default function LoginPage() {
             className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(255, 0, 0, 0.3)" }}
           >
-            <SiGmail className="w-5 h-5" />
-            <span>Gmail</span>
+            <SiGoogle className="w-5 h-5" />
+            <span>Google</span>
           </motion.a>
         </div>
       </motion.div>
