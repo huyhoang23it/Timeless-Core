@@ -28,6 +28,11 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
+.button-cancel-with-children:hover {
+  transition: 0.2s ease;
+  opacity: 0.9;
+  background-color: var(--color-gray-light);
+}
 
 @import "../styles/toast.css"; 
 
