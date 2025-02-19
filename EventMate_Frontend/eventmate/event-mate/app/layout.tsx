@@ -8,7 +8,6 @@ import { cssTransition, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SessionWrapper from "@/providers/SessionWrapper";
 import UserProvider from "@/providers/UserProvider";
-import { ThemeProvider } from "next-themes";
 
 const customTransition = cssTransition({
   enter: 'custom-enter',
@@ -40,7 +39,7 @@ export default function RootLayout({
 
           <LanguageProvider>
             <UserProvider>
-              <ThemeProvider>
+              
                 <ReactPortal wrapperId="global-toast-wrapper">
                   {children}
                   <ToastContainer
@@ -54,7 +53,7 @@ export default function RootLayout({
                     hideProgressBar={true}
                   />
                 </ReactPortal>
-              </ThemeProvider>
+             
             </UserProvider>
           </LanguageProvider>
 
