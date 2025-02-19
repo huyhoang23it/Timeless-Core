@@ -1,5 +1,5 @@
 "use client";
-import { PUB_TOPIC } from "@/constants/pubTopic";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { AUTHENTICATION_ERROR_CODE } from "@/constants/constant";
 // import { PUB_TOPIC } from "@/constants/pubTopic";
@@ -62,12 +62,12 @@ function UserProvider({ children }: { children: ReactNode }) {
   // }, [currentPage, router, status]);
 
   // Lắng nghe sự kiện UNAUTHORIZED_REQUEST từ PubSub
-  useEffect(() => {
-    const token = PubSub.subscribe(PUB_TOPIC.UNAUTHORIZED_REQUEST, handleLogout);
-    return () => {
-      PubSub.unsubscribe(token);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const token = PubSub.subscribe(PUB_TOPIC.UNAUTHORIZED_REQUEST, handleLogout);
+  //   return () => {
+  //     PubSub.unsubscribe(token);
+  //   };
+  // }, []);
 
   // Hàm logout
   const handleLogout = async () => {
