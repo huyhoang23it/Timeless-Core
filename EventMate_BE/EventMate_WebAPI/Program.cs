@@ -9,12 +9,14 @@ using EventMate_Service.Services;
 using EventMate_WebAPI.ModelsMapping;
 using Eventmate_Data.IEventRepository;
 
+using Eventmate_Common.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+builder.Services.AddSingleton<AESHelper>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -23,6 +25,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<EmailService>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -43,8 +47,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
+
+app.UseCors("reactApp");
 app.MapControllers();
 
 app.Run();
