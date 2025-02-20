@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventMate_Data.Entities;
+using EventMate_WebAPI.ModelsMapping.Authentication;
 using EventMate_WebAPI.ModelsMapping.Event;
 
 namespace EventMate_WebAPI.ModelsMapping
@@ -10,6 +11,10 @@ namespace EventMate_WebAPI.ModelsMapping
         {
             CreateMap<LoginModel, User>();
             CreateMap<SignUpModel, User>();
+            CreateMap<User, UserResponse>()  
+                  .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.RoleName));
+            CreateMap<LoginGoogleModel, User>();
+            CreateMap<ResetPasswordModel, User>();
 
             CreateMap<EventCreateModel, Events>();
        
