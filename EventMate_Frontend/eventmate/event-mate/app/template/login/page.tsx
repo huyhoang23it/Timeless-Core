@@ -15,7 +15,13 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 const handleLogin = async () => {
-  await signIn("credentials", { email, password, redirect: false });
+  try{
+ const result = await signIn("credentials", { email, password, redirect: false });
+  console.log(result);
+  }catch(error){
+    console.log(error);
+  }
+ 
 }
 const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false);
 

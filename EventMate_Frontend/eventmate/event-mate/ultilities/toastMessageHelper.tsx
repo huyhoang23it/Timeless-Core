@@ -1,7 +1,8 @@
 '@typescript-eslint/no-empty-object-type'
 import ToastMessage from '@/components/generator/ToastMessage';
 import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from '@/public';
-import { toast as reactToastify, ToastOptions, TypeOptions } from 'react-toastify';
+import {  TypeOptions, ToastOptions } from "react-toastify";
+import { toast } from "react-toastify";
 
 /** Functions for configurations */
 const DEFAULT_AUTO_CLOSE_SHORT_TEXT = 3000;
@@ -66,35 +67,38 @@ const handleCloseToast = () => {
     setCurrentToastId('');
     setCurrentMessage('');
     setNumOfSameMessage(0);
+  
 };
+
 
 const openToastMessage = (
     message: string,
     type: TypeOptions,
-    options?: ToastOptions<object> | undefined
+    options?: ToastOptions<object>
 ) => {
     const autoClose = options?.autoClose || getAutoCloseTime(message);
     const handledMessage = getHandledMessage(message);
-    // Show the new toast and save its ID
-    const id = reactToastify(<ToastMessage message={handledMessage} />, {
+   
+    // Hiển thị toast mới
+    const id = toast(<ToastMessage message={handledMessage} />, {
         ...options,
         type,
-        delay: 0,
         autoClose,
-        onClose: handleCloseToast,
+        onClose: (handleCloseToast),
     });
+
     setCurrentToastId(id);
 };
 
-const showToast = (message: string, type: TypeOptions, options?: ToastOptions<object> | undefined) => {
-    reactToastify.clearWaitingQueue();
+const showToast = (message: string, type: TypeOptions, options?: ToastOptions) => {
+    toast.clearWaitingQueue();
+   
     const autoClose = options?.autoClose || getAutoCloseTime(message);
-
-    if (!!currentToastId) {
-        console.log("currentToastId", currentToastId);
+   
+    if (currentToastId) {
         const handledMessage = getHandledMessage(message);
-        // If there is an existing toast, update it
-        reactToastify.update(currentToastId, {
+        toast.update(currentToastId, {
+          
             render: <ToastMessage message={handledMessage} />,
             autoClose,
             onClose: handleCloseToast,
@@ -102,7 +106,6 @@ const showToast = (message: string, type: TypeOptions, options?: ToastOptions<ob
             icon: getIconByType(type),
         });
     } else {
-        console.log("else");
         openToastMessage(message, type, options);
     }
 };
@@ -110,6 +113,7 @@ const showToast = (message: string, type: TypeOptions, options?: ToastOptions<ob
 /** Helper functions for user */
 const error = (msg: string, options?: ToastOptions<object> | undefined) => {
     showToast(msg, 'error', { ...options, icon: getIconByType('error') });
+   
 };
 
 const info = (msg: string, options?: ToastOptions<object> | undefined) => {
@@ -130,7 +134,7 @@ const warning = (msg: string, options?: ToastOptions<object> | undefined) => {
     });
 };
 
-export const toast = {
+export const toastHelper = {
     error,
     info,
     warning,
