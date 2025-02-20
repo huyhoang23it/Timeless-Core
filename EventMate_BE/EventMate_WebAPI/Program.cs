@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using EventMate_Service.Services;
 using EventMate_WebAPI.ModelsMapping;
 using Eventmate_Common.Helpers;
+using Eventmate_Data.IEventRepository;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,10 +21,12 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<EmailService>();
 
+builder.Services.AddScoped<EventService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
