@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventMate_Data.Entities;
+using EventMate_WebAPI.ModelsMapping.Event;
 
 namespace EventMate_WebAPI.ModelsMapping
 {
@@ -9,6 +10,9 @@ namespace EventMate_WebAPI.ModelsMapping
         {
             CreateMap<LoginModel, User>();
             CreateMap<SignUpModel, User>();
+
+            CreateMap<EventCreateModel, Events>();
+       
         }
     }
 }
