@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion"; // Import thư viện animation
 import { FaFacebookF } from "react-icons/fa";
 import { SiGmail } from "react-icons/si"; // Gmail không có icon chính thức trong Heroicons, nên dùng react-icons
@@ -132,7 +133,7 @@ export default function LoginPage() {
 
         {/* Đăng ký */}
         <div className="text-center mt-4">
-          <p className="text-gray-600">Don&apos;t have an account?{" "}
+          <p className="text-gray-600">Don't have an account?{" "}
             <a
               href="#"
               className="relative text-blue-600 font-medium transition-all duration-300

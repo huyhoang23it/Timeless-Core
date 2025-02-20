@@ -1,13 +1,7 @@
-﻿
-using Eventmate_Common.Helpers;
-using EventMate_Common.Common;
-using EventMate_Common.Constants;
-using EventMate_Common.Status;
-using Eventmate_Data.Entities;
+﻿using EventMate_Common.Status;
 using Eventmate_Data.IRepositories;
 using EventMate_Data.Entities;
 using EventMate_Data.IRepositories;
-using EventMate_Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -25,37 +19,33 @@ namespace EventMate_Service.Services
         private readonly IAuthRepository authRepository;
         private readonly IUserRepository userRepository;
         private readonly IConfiguration _configuration;
-        private readonly EmailService _emailService;
-        private readonly AESHelper _AESHelper;
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IUserRepository userRepository,
-            EmailService emailService, AESHelper AESHelper)
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IUserRepository userRepository)
         {
             this.authRepository = authRepository;
             this.userRepository = userRepository;
             _configuration = configuration;
-            _emailService = emailService;
-            _AESHelper = AESHelper;
+         
         }
 
-        public async Task<User> LoginAsync(User userMapper)
+        public async Task<string> LoginAsync(User userMapper)
         {
 
             //Check email and pass
             var user = await authRepository.IsValidUser(userMapper.Email, userMapper.Password);
 
-            return user;
+            return await CreateToken(user);
 
         }
-        public async Task<User> Login_GoogleAsync(string email, string googleID)
+        public async Task<string> Login_GoogleAsync(string email, string googleID)
         {
 
             //Check email and googleID
             var user = await authRepository.Login_Google(email, googleID);
 
-            return user;
+            return await CreateToken(user);
 
         }
-        public async Task<string?> CreateToken(User? user)
+        private async Task<string> CreateToken(User? user)
         {
             if (user == null) return string.Empty;
             if (user.Status == UserStatus.Inactive) return "Inactive";
@@ -81,17 +71,17 @@ namespace EventMate_Service.Services
             ////Create token
             var token = jwtService.GenerateTokenLogin(authClaims);
 
+
+
             return token;
         }
-        public async Task<User> CreateNewAccount(User user)
+        public async Task<string> CreateNewAccount(User user)
         {
-            try
-            {
-                if (await IsExistUser(user.Email))
-                {
-                    throw new InvalidOperationException("User already exists."+ user.Email);
-                }
 
+            // Check if the user already exists
+            var existingUser = await authRepository.GetUserByEmail(user.Email);
+            if (existingUser == null)
+            {
                 // Set new user information
                 user.CreatedAt = DateTime.Now;
                 user.Status = UserStatus.Active;
@@ -102,198 +92,19 @@ namespace EventMate_Service.Services
                 {
                     user.RoleId = roleId.Value;
                 }
-                
+
                 // SignUp new User
                 await authRepository.SignUp(user);
 
-                return user;
-
+                // Create and gen token
+                return await CreateToken(user);
             }
-            catch(Exception ex)
+            else
             {
-                throw new Exception(ex.Message);
-            }
-              
-            
-        }
-        public async Task SendOTPtoEmail(string OTPCode, string email)
-        {
-
-            var subject = Constants.SubjectOTPEmail;
-            var body = string.Format(Constants.OTPEmailBody, OTPCode);
-
-            await _emailService.SendEmail(email, subject, body);
-        }
-        public async Task<bool> IsExistUser(string email)
-        {
-            var existingUser = await authRepository.GetUserByEmail(email);
-            return existingUser !=null;
-
-        }
-        public async Task<OTPAuthen> CreateOTP(string email, string password)
-        {
-            try
-            {
-                var otp = await authRepository.CreateOTP(email, password);
-              
-                await SendOTPtoEmail(otp.OTPCode, email);
-                return otp;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
+                // Returns a message or value if the user already exists
+                throw new InvalidOperationException("User already exists.");
             }
         }
-        public async Task<OTPAuthen> VerifyOTP(string OTPCode,string token)
-        {
-            try
-            {
-                var otp = await authRepository.CheckOTP(OTPCode,token); 
-                var emailPassword = _AESHelper.Decrypt(token);
-                var email = emailPassword.Split("::")[0];
-                var password = emailPassword.Split("::")[1];
-                var user = new User
-                {
-                    Email = email,
-                    Password = password,
-                };
-                //await authRepository.RemoveOTP(OTPCode);
-                await CreateNewAccount(user);
-                return otp;
-            }
-          
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task SendResetPasswordEmail(string userEmail)
-        {
-            try
-            {
-                var resetToken = GenerateToken(userEmail);
-                var baseurl = _configuration["AppSettings:BaseUrl"];
-                var resetUrl = $"{baseurl}/api/Auth/ResetPassword?token={resetToken}";
-                var subject = Constants.SubjectResetPassEmail;
-                var body = string.Format(Constants.BodyResetPassEmail, userEmail, resetToken);
-
-              await _emailService.SendEmail(userEmail, subject, body);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-        }
-        public async Task<User> GetUserByToken(string token)
-        {
-            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
-
-            if (JwtService.IsTokenExpired(token))
-            {
-                throw new Exception("Token expired");
-            }
-            var principal = jwtService.GetPrincipal(token) ?? throw new Exception("Invalid token");
-            var emailClaim = principal.FindFirst(ClaimTypes.Email) ?? throw new Exception("Email claim not found in token");
-
-            var email = emailClaim.Value;
-
-
-            //get user by email
-            var user = await authRepository.GetUserByEmail(email);
-            return user;
-
-        }
-        public bool VerifyPassword(string oldPassword, string tempPassword)
-        {
-            return BCrypt.Net.BCrypt.Verify(oldPassword, tempPassword);
-        }
-        public async Task ChangePasswordAsync(User user, string newPassword, string oldPassword)
-        {
-
-            try
-            {
-                await authRepository.ResetPassword(user);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-        public string GenerateToken(string email)
-        {
-            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
-            var token = jwtService.GenerateToken(email);
-            authRepository.SetToken(email, token);
-            return token;
-        }
-    
-        private async Task<string> ValidateToken(string token)
-        {
-            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
-
-            if (JwtService.IsTokenExpired(token))
-            {
-                throw new SecurityTokenException(ResponseKeys.TokenExpired);
-            }
-
-            var principal = jwtService.GetPrincipal(token);
-            if (principal == null)
-            {
-                throw new SecurityTokenException(ResponseKeys.InvalidToken);
-            }
-
-            var emailClaim = principal.FindFirst(ClaimTypes.Email);
-            if (emailClaim == null)
-            {
-                throw new InvalidOperationException(ResponseKeys.EmailClaimNotFound);
-            }
-
-            var email = emailClaim.Value;
-
-            var tokenFromDb = await authRepository.GetToken(email);
-            if (tokenFromDb == null)
-            {
-                throw new KeyNotFoundException(ResponseKeys.TokenNotFound);
-            }
-
-            if (tokenFromDb != token)
-            {
-                throw new UnauthorizedAccessException(ResponseKeys.InvalidToken);
-            }
-
-            return email;
-        }
-        public string GetEmailInToken(string token) {
-            var jwtService = new JwtService(_configuration["JWT:Secret"]!, _configuration["JWT:ValidIssuer"]!);
-            if (JwtService.IsTokenExpired(token))
-            {
-                throw new Exception("Token expired");
-            }
-
-            var principal = jwtService.GetPrincipal(token) ?? throw new Exception("Invalid token");
-            var emailClaim = principal.FindFirst(ClaimTypes.Email) ?? throw new Exception("Email claim not found in token");
-
-            var email = emailClaim.Value;
-            return email;
-        }
-        
-        public async Task ChangePasswordAsync(User user)
-        {
-
-            try
-            {
-                //Reset pass
-                await authRepository.ResetPassword(user);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-
 
     }
 
