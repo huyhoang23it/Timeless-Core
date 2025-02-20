@@ -6,9 +6,18 @@ import { SiGoogle } from "react-icons/si";
 import { Button } from "@/components/common/button";
 import { useLanguage } from "@/providers/LanguageProvider";
 import Input from "@/components/common/Input";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import ForgotpasswordModal from "@/components/authen/ForgotpasswordModal";
 
 export default function LoginPage() {
   const { t } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+const handleLogin = async () => {
+  await signIn("credentials", { email, password, redirect: false });
+}
+const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
@@ -29,8 +38,9 @@ export default function LoginPage() {
             className=" !h-[44px] md:w-[400px] w-[350px] !rounded-xl pr-8"
             type="text"
             name="email"
-            value={''}
-            onChange={() => {
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
             }}
             placeholder={t('email-input')}
           />
@@ -39,26 +49,20 @@ export default function LoginPage() {
             className=" !h-[44px] md:w-[400px] w-[350px] !rounded-xl pr-8"
             type="text"
             name="password"
-            value={''}
-            onChange={() => {
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
             }}
             placeholder={t('password-input')}
           />
           
         </div>
         {/* Ghi nhớ + Quên mật khẩu */}
-        <div className="flex items-center justify-between text-sm">
-          <a
-            href="#"
-            className="relative text-blue-600 font-medium transition-all duration-300 
-      before:absolute before:-bottom-1 before:right-0 before:w-0 before:h-[2px] 
-      before:bg-blue-600 before:transition-all before:duration-300 
-      hover:text-blue-700 hover:before:w-full hover:before:right-0 
-      hover:scale-105 text-right block ml-auto"
-          >
+        <div className="flex items-center justify-between text-sm"
+        onClick={() => setIsShowForgotPasswordModal(true)}>
+        
             Forgot Password?
-          </a>
-
+          
 
         </div>
 
@@ -66,6 +70,7 @@ export default function LoginPage() {
           className="w-full font-semibold transition-all text-white"
           label={t('payment:resume-your-plan')}
           isLoading={false}
+          onClickButton={handleLogin}
         ></Button>
         {/* Đăng ký */}
         <div className="text-center mt-4">
@@ -116,6 +121,31 @@ export default function LoginPage() {
             <span>Google</span>
           </motion.a>
         </div>
+        {isShowForgotPasswordModal && (
+          <ForgotpasswordModal
+            modalProps={{
+              isOpen: isShowForgotPasswordModal,
+              closeModal: () => setIsShowForgotPasswordModal(false),
+              title: 'Forgot Password',
+              children: <div>Forgot Password</div>
+            }}
+          />
+        )}
+      
+      
+         {/* <ConfirmModal
+                title={t('chat:delete-avatar-confirm-title')}
+                description={t('chat:delete-avatar-confirm-text')}
+                closeModal={() => {
+                   
+                }}
+                isOpen={true}
+                okContent={t('chat:delete-avatar-confirm-button')}
+                onOK={() => {
+                   
+                }}
+                cancelContent={t('chat:delete-avatar-cancel-button')}
+            /> */}
       </div>
     </div>
   );
