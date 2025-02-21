@@ -24,8 +24,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<EventService>();
+
 builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<EventService>();
 
 // Add services to the container.
 

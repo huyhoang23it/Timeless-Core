@@ -47,6 +47,9 @@ const handler = NextAuth({
 
         const agent = new Agent({ rejectUnauthorized: false });
         const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/login`, { email: credentials.email, password: credentials.password }, { httpsAgent: agent });
+        if (res.data.status !== 200) {
+          throw new Error(res.data.key);
+        }
         const user = res.data.data.user;
         return {
           id: user.userId,

@@ -31,7 +31,7 @@ namespace EventMate_WebAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ApiResponse<string>(400, ResponseKeys.InvalidRequest, "Dữ liệu không hợp lệ."));
+                    return BadRequest();
                 }
 
                 var userRequest = _mapper.Map<User>(model);
@@ -40,11 +40,11 @@ namespace EventMate_WebAPI.Controllers
 
                 if (user == null)
                 {
-                    return Unauthorized(new ApiResponse<string>(401, ResponseKeys.InvalidCredentials, "Email hoặc mật khẩu không chính xác."));
+                    return Unauthorized();
                 }
                 else if (user.Status.Equals(UserStatus.Inactive))
                 {
-                    return Unauthorized(new ApiResponse<string>(403, ResponseKeys.AccountDisabled, "Tài khoản của bạn đã bị vô hiệu hóa. Liên hệ hỗ trợ để được giúp đỡ."));
+                    return Forbid();
                 }
 
               var token =  _authService.CreateToken(user);

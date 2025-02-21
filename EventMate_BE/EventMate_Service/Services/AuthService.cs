@@ -118,7 +118,7 @@ namespace EventMate_Service.Services
         }
         public async Task SendOTPtoEmail(string OTPCode, string email)
         {
-
+            
             var subject = Constants.SubjectOTPEmail;
             var body = string.Format(Constants.OTPEmailBody, OTPCode);
 
