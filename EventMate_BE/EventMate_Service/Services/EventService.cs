@@ -45,12 +45,13 @@ namespace EventMate_Service.Services
             return await _eventRepository.GetEventByIdAsync(eventId);
         }
 
-        public async Task AddEventAsync(Events eventEntity)
+        public async Task<Events> AddEventAsync(Events eventEntity)
         {
-            await _eventRepository.AddEventAsync(eventEntity);
+            var createdEvent = await _eventRepository.AddEventAsync(eventEntity);
+            return createdEvent ?? null;
         }
 
-   
+
         public async Task DeleteEventAsync(Guid eventId)
         {
             await _eventRepository.DeleteEventAsync(eventId);
@@ -60,6 +61,12 @@ namespace EventMate_Service.Services
         {
             return await _eventRepository.ChangeEventStatusAsync(eventId, newStatus);
         }
+
+        public async Task<Events?> GetEventByNameAsync(string eventName)
+        {
+            return await _eventRepository.GetEventByNameAsync(eventName);
+        }
+
 
     }
 
