@@ -23,29 +23,29 @@ namespace Eventmate_Data.Repositories
            
         }
 
-        public Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus)
-        {
+        //public Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus)
+        //{
             
-        }
+        //}
 
-        public Task DeleteGroupAsync(Guid groupId)
-        {
+        //public Task DeleteGroupAsync(Guid groupId)
+        //{
             
-        }
+        //}
 
-        public async Task<IEnumerable<Groups>> GetAllGroupsAsync()
-        {
-            return await _context.Groups!.ToListAsync();
-        }
+        //public async Task<IEnumerable<Groups>> GetAllGroupsAsync()
+        //{
+        //    return await _context.Groups!.ToListAsync();
+        //}
 
-        public Task<Groups?> GetGroupByIdAsync(Guid groupId)
-        {
+        //public Task<Groups?> GetGroupByIdAsync(Guid groupId)
+        //{
             
-        }
+        //}
 
-        public Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status)
-        {
+        //public Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status)
+        //{
             
-        }
+        //}
     }
 }

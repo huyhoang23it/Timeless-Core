@@ -10,12 +10,12 @@ namespace Eventmate_Data.IRepositories
 {
     public interface IGroupSpaceRepository
     {
-        Task<IEnumerable<Groups>> GetAllGroupsAsync();
-        Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status);
+        //Task<IEnumerable<Groups>> GetAllGroupsAsync();
+        //Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status);
 
-        Task<Groups?> GetGroupByIdAsync(Guid groupId);
-        Task AddGroupAsync(Groups groupEntity);
-        Task DeleteGroupAsync(Guid groupId);
-        Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus);
+        //Task<Groups?> GetGroupByIdAsync(Guid groupId);
+        //Task AddGroupAsync(Groups groupEntity);
+        //Task DeleteGroupAsync(Guid groupId);
+        //Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus);
     }
 }
