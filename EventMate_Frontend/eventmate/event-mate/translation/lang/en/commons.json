@@ -1,5 +1,6 @@
 {
     "knowledge-bots": "Knowledge-Bots",
-    "intro-name": "Blockbrain for Business"
-    
+    "intro-name": "Blockbrain for Business",
+     "email-input": "Enter your email",
+       "password-input": "Enter your password"
 }

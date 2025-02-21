@@ -4,7 +4,7 @@ INSERT INTO Role (RoleId, RoleName, Status) VALUES
 (NEWID(), 'User', 1),
 (NEWID(), 'Event Organizer', 1),
 (NEWID(), 'Staff', 1);
-
+select * from OTPAuthen
 -- Insert data into User table
 INSERT INTO [User] (UserId, FullName, Email, Password, RoleId, Status, CreatedAt) VALUES
 (NEWID(), 'Nguyen Van A', 'nguyenvana@example.com', 'password123', (SELECT RoleId FROM Role WHERE RoleName = 'User'), 1, GETDATE()),
