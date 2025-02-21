@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Eventmate_Data.IRepositories
 {
-    public interface IGroupSpaceRepository
+    public interface IGroupRepository
     {
-        //Task<IEnumerable<Groups>> GetAllGroupsAsync();
+        Task<IEnumerable<Groups>> GetAllGroupsAsync();
         //Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status);
 
         //Task<Groups?> GetGroupByIdAsync(Guid groupId);
-        //Task AddGroupAsync(Groups groupEntity);
+        Task AddGroupAsync(Groups groupEntity);
         //Task DeleteGroupAsync(Guid groupId);
         //Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus);
     }

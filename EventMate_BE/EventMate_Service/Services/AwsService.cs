@@ -18,7 +18,7 @@ namespace EventMate_Service.Services
         {
             _s3Client = s3Client;
         }
-        public async Task<string> addFile(IFormFile file, string bucketName, string? prefix)
+        public async Task<string> addFile(IFormFile file, string bucketName)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace EventMate_Service.Services
                 var request = new PutObjectRequest()
                 {
                     BucketName = bucketName,
-                    Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                    Key = file.FileName ,
                     InputStream = file.OpenReadStream()
                 };
                 request.Metadata.Add("Content-Type", file.ContentType);
