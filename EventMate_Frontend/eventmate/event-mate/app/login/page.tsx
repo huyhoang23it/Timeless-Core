@@ -9,6 +9,9 @@ import Input from "@/components/common/Input";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import InputSecret from "@/components/common/InputSecret";
+import { BUTTON_COMMON_TYPE } from "@/constants/constant";
+
 const Login = () => {
   const { t } = useLanguage();
   const router = useRouter();
@@ -17,6 +20,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleLoginGoogle = async () => {
+
+    const result = await signIn("google", { callbackUrl: "/" });
+    if (result?.error) {
+      toastHelper.error(t(`login:login-fail-${result.status}`));
+    } else {
+      toastHelper.success(t('login:login-success'));
+
+    }
+  }
   const handleLogin = async () => {
     try {
       setLoading(true);
@@ -62,7 +75,7 @@ const Login = () => {
             placeholder={t('email-input')}
           />
           <label className="block mb-1 font-medium text-gray-700">Password</label>
-          <Input
+          <InputSecret
             className=" !h-[44px] md:w-[400px] w-[350px] !rounded-xl pr-8"
             type="text"
             name="password"
@@ -125,15 +138,14 @@ const Login = () => {
 
         {/* Nút mạng xã hội */}
         <div className="flex justify-center space-x-4">
-          {/* Nút Gmail */}
-          {/* <motion.a
-            href="#"
-            className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
-            whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(255, 0, 0, 0.3)" }}
-          >
-            <SiGoogle className="w-5 h-5" />
-            <span>Google</span>
-          </motion.a> */}
+
+          <Button
+            className="w-full font-semibold text-white items-center justify-center"
+            label={t('payment:resume-your-plan')}
+            variant={BUTTON_COMMON_TYPE.GOOGLE}
+            isLoading={loading}
+            onClickButton={handleLoginGoogle}
+          ></Button>
         </div>
         {isShowForgotPasswordModal && (
           <ForgotpasswordModal
