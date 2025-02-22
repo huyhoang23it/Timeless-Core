@@ -28,29 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionWrapper>
 
-          <LanguageProvider>
-            <UserProvider>
-              
-                <ReactPortal wrapperId="global-toast-wrapper">
-                  {children}
-                  <ToastContainer
-                    transition={customTransition}
-                    limit={1}
-                    position={'top-left'}
-                    theme="colored"
-                    className="display-linebreak"
-                    draggable={false}
-                    closeButton={false}
-                    hideProgressBar={true}
-                  />
-                </ReactPortal>
-             
-            </UserProvider>
-          </LanguageProvider>
-
-        </SessionWrapper>
+        <GlobalProviders>
+          {children}
+        </GlobalProviders>
 
       </body>
     </html >
