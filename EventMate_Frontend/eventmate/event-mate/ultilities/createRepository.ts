@@ -72,11 +72,10 @@ export const fetcher = <ResponseData = any>(
             ...config,
             url,
             httpsAgent: new Agent({ rejectUnauthorized: false }),
-            params: {
-                ...config?.params,
-            },
+          
             headers: {
                 ...config?.headers,
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${session?.user.token}` || '',
             },
 

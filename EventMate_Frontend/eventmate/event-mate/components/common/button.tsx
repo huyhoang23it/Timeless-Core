@@ -18,7 +18,6 @@ type Props = {
     onClickButton?: MouseEventHandler<HTMLButtonElement>;
     variant?: BUTTON_COMMON_TYPE;
     children?: ReactNode | ReactNode[];
-    isMobile?: boolean;
 };
 
 const mapButtonVariantToClassName = (variant: BUTTON_COMMON_TYPE) => {
@@ -37,17 +36,17 @@ const mapButtonVariantToClassName = (variant: BUTTON_COMMON_TYPE) => {
         }
 
         case BUTTON_COMMON_TYPE.CANCEL_WITH_CHILDREN: {
-            return 'transparent border border-slate-300 dark:border-slate-700 hover:border-primary-500 hover:border-black active:bg-slate-200 dark:active:bg-primary-600';
+            return 'transparent border border-slate-300 dark:border-slate-700 hover:border-primary-500 hover:border-black active:bg-slate-200 ';
         }
         case BUTTON_COMMON_TYPE.DELETE_WITH_CHILDREN: {
-            return 'transparent border border-error-500 text-error-500 hover:border-error-700 hover:text-error-700 dark:hover:bg-error-500 dark:hover:text-white';
+            return 'transparent border border-error-500 text-error-500 hover:border-error-700 hover:text-error-700';
         }
         case BUTTON_COMMON_TYPE.DELETE: {
             return 'bg-error-500 text-white hover:bg-error-700';
         }
 
         case BUTTON_COMMON_TYPE.CANCEL_BLACK: {
-            return 'button-cancel-with-children bg-[var(--color-black-white)] text-[var(--text-white-black)] dark:hover:border-primary-500';
+            return 'button-cancel-with-children bg-[var(--color-black-white)] text-[var(--text-white-black)] ';
         }
 
         case BUTTON_COMMON_TYPE.PRIMARY_OUTLINE_WITH_CHILDREN: {
@@ -172,12 +171,12 @@ export const Button = ({
                         onClick={onClickButton}
                         disabled={disabled}
                     >
-                        <span className={`${isLoading ? 'opacity-0' : ''}`}>{label}</span>
-                        {isLoading && (
+                    
+                        {isLoading ? (
                             <div className="loading-btn">
                                 <ArrowPathIcon className="w-6 h-6 ml-2 animate-spin" />
                             </div>
-                        )}
+                        ) :    <span className={`${isLoading ? 'opacity-0' : ''}`}>{label}</span> }
                     </button>
                 );
         }

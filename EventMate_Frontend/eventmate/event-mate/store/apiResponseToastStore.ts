@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import i18n from '@/translation/i18n';
-import { toast } from '@/ultilities/toastMessageHelper';
+import { toastHelper } from '@/ultilities/toastMessageHelper';
 import { IGNORES_MESSAGE_KEY } from '@/constants/constant';
 
 type queuedApiCall = {
@@ -91,7 +91,7 @@ export const useApiResponseToastStore = create<ApiResponseToastStore>()(
                         (!IGNORES_MESSAGE_KEY.includes(messageKey) || isBypassIgnoreMessage)
                     ) {
                         const messageFormat = i18n.t(`success:${messageKey}`);
-                        toast.success(messageFormat);
+                        toastHelper.success(messageFormat);
                     }
                 },
                 toastSuccessFromBatch: (messageKey: string) => {
@@ -157,7 +157,7 @@ export const useApiResponseToastStore = create<ApiResponseToastStore>()(
                 },
                 toastErrorNormal: (messageKey: string) => {
                     const messageFormat = i18n.t(`errors:${messageKey}`);
-                    toast.error(messageFormat);
+                    toastHelper.error(messageFormat);
                 },
                 toastErrorFromBatch: (messageKey: string) => {
                     const { apiBatch } = get();

@@ -2,17 +2,10 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import LanguageProvider from "@/providers/LanguageProvider";
-import ReactPortal from "@/components/basic/ReactPortal";
-import { cssTransition, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import SessionWrapper from "@/providers/SessionWrapper";
-import UserProvider from "@/providers/UserProvider";
 
-const customTransition = cssTransition({
-  enter: 'custom-enter',
-  exit: 'custom-exit',
-});
+import 'react-toastify/dist/ReactToastify.css';
+import GlobalProviders from '@/providers/GlobalProviders';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -43,15 +36,14 @@ export default function RootLayout({
                 <ReactPortal wrapperId="global-toast-wrapper">
                   {children}
                   <ToastContainer
-                  transition={customTransition}
-                  limit={1}
-                  position={'top-left'}
-                  theme="colored"
-                  className="display-linebreak"
-                  draggable={false}
-                  closeButton={false}
-                  hideProgressBar={true} 
-                  aria-label={undefined}                  
+                    transition={customTransition}
+                    limit={1}
+                    position={'top-left'}
+                    theme="colored"
+                    className="display-linebreak"
+                    draggable={false}
+                    closeButton={false}
+                    hideProgressBar={true}
                   />
                 </ReactPortal>
              
