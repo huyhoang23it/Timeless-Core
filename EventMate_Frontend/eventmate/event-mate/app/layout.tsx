@@ -43,14 +43,15 @@ export default function RootLayout({
                 <ReactPortal wrapperId="global-toast-wrapper">
                   {children}
                   <ToastContainer
-                    transition={customTransition}
-                    limit={1}
-                    position={'top-left'}
-                    theme="colored"
-                    className="display-linebreak"
-                    draggable={false}
-                    closeButton={false}
-                    hideProgressBar={true}
+                  transition={customTransition}
+                  limit={1}
+                  position={'top-left'}
+                  theme="colored"
+                  className="display-linebreak"
+                  draggable={false}
+                  closeButton={false}
+                  hideProgressBar={true} 
+                  aria-label={undefined}                  
                   />
                 </ReactPortal>
              
