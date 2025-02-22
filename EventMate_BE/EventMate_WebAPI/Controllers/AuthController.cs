@@ -149,12 +149,11 @@ namespace EventMate_WebAPI.Controllers
 
         }
 
-        [HttpPost("forgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             try
             {
-                IActionResult response;
 
                 var isUser = await _authService.IsExistUser(email);
 
