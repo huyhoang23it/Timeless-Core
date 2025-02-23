@@ -28,6 +28,27 @@ namespace EventMate_WebAPI.Controllers
             if (!ModelState.IsValid)
             {
                 response = BadRequest();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var userRequest = _mapper.Map<User>(model);
+
+                var user = await _authService.LoginAsync(userRequest);
+
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+                else if (user.Status.Equals(UserStatus.Inactive))
+                {
+                    return Forbid();
+                }
+
+              var token =  _authService.CreateToken(user);
+                var userResponse = _mapper.Map<UserResponse>(user);
+                return Ok(new ApiResponse<object>(200, ResponseKeys.LoginSuccess, new {user = userResponse,token = token?.Result }));
             }
             //mapper loginmodel to user
             var user = _mapper.Map<User>(model);

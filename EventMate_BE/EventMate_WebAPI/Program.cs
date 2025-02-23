@@ -10,6 +10,8 @@ using EventMate_WebAPI.ModelsMapping;
 using Eventmate_Data.IEventRepository;
 using Amazon.S3;
 
+using Eventmate_Common.Helpers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,10 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<AwsService>();
+
+builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<EventService>();
 
 // Add services to the container.
 

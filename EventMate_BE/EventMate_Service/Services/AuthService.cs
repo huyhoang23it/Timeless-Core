@@ -103,6 +103,37 @@ namespace EventMate_Service.Services
             {
                 // Returns a message or value if the user already exists
                 throw new InvalidOperationException("User already exists.");
+                throw new Exception(ex.Message);
+            }
+              
+            
+        }
+        public async Task SendOTPtoEmail(string OTPCode, string email)
+        {
+            
+            var subject = Constants.SubjectOTPEmail;
+            var body = string.Format(Constants.OTPEmailBody, OTPCode);
+
+            await _emailService.SendEmail(email, subject, body);
+        }
+        public async Task<bool> IsExistUser(string email)
+        {
+            var existingUser = await authRepository.GetUserByEmail(email);
+            return existingUser !=null;
+
+        }
+        public async Task<OTPAuthen> CreateOTP(string email, string password)
+        {
+            try
+            {
+                var otp = await authRepository.CreateOTP(email, password);
+              
+                await SendOTPtoEmail(otp.OTPCode, email);
+                return otp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
