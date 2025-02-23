@@ -122,18 +122,6 @@ namespace EventMate_WebAPI.Controllers
             }
         }
 
-        //[HttpGet("user/{userId}")]
-        //public async Task<IActionResult> GetEventsByUser(Guid userId)
-        //{
-        //    var events = await _eventService.GetEventsByUserAsync(userId);
-
-        //    if (!events.Any())
-        //    {
-        //        return NotFound(new { message = "No events found for this user" });
-        //    }
-
-        //    return Ok(events);
-        //}
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetEventsByUser(Guid userId)

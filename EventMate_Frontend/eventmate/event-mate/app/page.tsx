@@ -1,4 +1,3 @@
-import Image from "next/image";
 "use client"
 import Dashboard from "@/components/basic/Dashboard";
 

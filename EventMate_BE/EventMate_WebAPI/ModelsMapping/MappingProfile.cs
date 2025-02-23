@@ -2,6 +2,7 @@
 using EventMate_Data.Entities;
 using EventMate_WebAPI.ModelsMapping.Event;
 using EventMate_WebAPI.ModelsMapping.Authentication;
+using EventMate_WebAPI.ModelsMapping.Authentication;
 
 using EventMate_WebAPI.ModelsMapping.Event;
 

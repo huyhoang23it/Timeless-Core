@@ -26,9 +26,6 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 
 
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<EventService>();
-builder.Services.AddScoped<GroupService>();
-builder.Services.AddScoped<AwsService>();
 
 builder.Services.AddScoped<EmailService>();
 
