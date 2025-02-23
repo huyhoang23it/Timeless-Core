@@ -6,6 +6,8 @@ import { useLanguage } from "@/providers/LanguageProvider";
 import { Button } from "../common/button";
 import { AuthRepository } from "@/repositories/AuthRepository";
 import { useRouter } from "next/navigation";
+import ArrowPathIcon from '@heroicons/react/24/outline/ArrowPathIcon';
+
 type CheckOTPModalProps = {
     email: string;
     token: string;
@@ -24,6 +26,7 @@ const CheckOTPModal = ({
 
     const [otp, setOTP] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingResend, setLoadingResend] = useState<boolean>(false);
     const handleCheckOTP = async () => {
         setLoading(true);
         try {
@@ -42,6 +45,7 @@ const CheckOTPModal = ({
     };
     const handleResendOTP = async () => {
         try {
+            setLoadingResend(true);
             const res = await AuthRepository.createOTP(email, token);
             if (!res.error) {
                 setToken(res.data);
@@ -49,7 +53,7 @@ const CheckOTPModal = ({
         } catch (e) {
             console.log(e);
         } finally {
-
+            setLoadingResend(false);
         }
     };
     return (
@@ -75,16 +79,22 @@ const CheckOTPModal = ({
                                 handleCheckOTP();
                             }
                         }}
-                        placeholder={t('otp-input-placeholder')}
+                        placeholder={t('authen:otp-input-placeholder')}
 
                     />
                 </div>
 
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">{t("authen:otp-note")}</h2>
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">{t("authen:otp-missing")}</h2>
-                <p
-                    onClick={handleResendOTP}
-                >{t("authen:resend-otp")}</p>
+                {loadingResend ?
+                    <div className="loading-btn">
+                        <ArrowPathIcon className="w-6 h-6 ml-2 animate-spin" />
+                    </div>
+                    :
+                    <p
+                        onClick={handleResendOTP}
+                    >{t("authen:resend-otp")}</p>
+                }
                 <Button
                     className="w-full font-semibold text-white items-center justify-center"
                     label={t('authen:continue')}

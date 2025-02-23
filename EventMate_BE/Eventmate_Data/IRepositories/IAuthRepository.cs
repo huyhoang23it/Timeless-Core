@@ -21,7 +21,7 @@ namespace EventMate_Data.IRepositories
         public Task<OTPAuthen> CreateOTP(string email, string password);
         public Task<OTPAuthen> CheckOTP(string OTPCode,string token);
         public Task RemoveOTP(string otpCode);
- 
+        public Task RemoveOTPExpired();
 
     }
 }

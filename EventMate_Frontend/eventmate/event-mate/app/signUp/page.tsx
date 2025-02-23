@@ -96,6 +96,7 @@ const SignUpPage = () => {
           />
 
         </div>
+        
         <ul>
           {[
             { key: "length", message: t('authen:password-validation:length') },
