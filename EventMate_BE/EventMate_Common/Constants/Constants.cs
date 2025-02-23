@@ -8,6 +8,7 @@ namespace EventMate_Common.Constants
 {
     public static  class Constants
     {
+        public const string urlImg = "https://{0}.s3.ap-southeast-2.amazonaws.com/{1}";
         public const string PasswordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=-";
 
         public const string SubjectOTPEmail = "EventMate - Xác thực OTP";

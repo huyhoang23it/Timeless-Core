@@ -1,33 +1,30 @@
-﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:13097",
-      "sslPort": 44301
-    }
-  },
+{
   "profiles": {
     "http": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5058",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AWS_ACCESS_KEY_ID": "AKIAZ24IS6TUXJVQ5U4J",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_DEFAULT_REGION": "ap-southeast-2"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5058"
     },
     "EventMate_WebAPI": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7121;http://localhost:5058",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AWS_ACCESS_KEY_ID": "AKIAZ24IS6TUXJVQ5U4J",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_DEFAULT_REGION": "ap-southeast-2"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7121;http://localhost:5058"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -36,6 +33,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:13097",
+      "sslPort": 44301
     }
   }
 }
