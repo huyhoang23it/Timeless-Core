@@ -3,6 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LanguageProvider from "@/providers/LanguageProvider";
 
+"use client";
+
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+import 'react-toastify/dist/ReactToastify.css';
+import GlobalProviders from '@/providers/GlobalProviders';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,16 +32,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-  
-      <html lang="en">
+
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
           <LanguageProvider> {children}</LanguageProvider>
        
+        <GlobalProviders>
+          {children}
+        </GlobalProviders>
+
       </body>
-    </html>
- 
-    
+    </html >
+
+
   );
 }
