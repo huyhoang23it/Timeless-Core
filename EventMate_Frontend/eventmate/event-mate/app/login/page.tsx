@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import InputSecret from "@/components/common/InputSecret";
 import { BUTTON_COMMON_TYPE } from "@/constants/constant";
-
+import * as EmailValidator from 'email-validator';
 const Login = () => {
   const { t } = useLanguage();
   const router = useRouter();
@@ -20,24 +20,47 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const validateEmail = (email: string, isNotify: boolean = true) => {
+    if (!EmailValidator.validate(email)) {
+      if (isNotify && email.length != 0) {
+        toastHelper.error(t('errors:validate-email-failed'));
+      }
+      return false;
+    }
+    return true;
+  };
+  const validateSubmit = () => {
+    let checkSubmit = false;
+    if (validateEmail(email)) {
+    checkSubmit = true
+    }
+    if (password.length > 0) {
+    
+     checkSubmit = true
+    }else{
+        toastHelper.error(t('errors:validate-password-required'));
+    }
+    return checkSubmit;
+  };
   const handleLoginGoogle = async () => {
 
     const result = await signIn("google", { callbackUrl: "/" });
     if (result?.error) {
-      toastHelper.error(t(`login:login-fail-${result.status}`));
+      toastHelper.error(t(`authen:login-fail-${result.status}`));
     } else {
-      toastHelper.success(t('login:login-success'));
+      toastHelper.success(t('authen:login-success'));
 
     }
   }
   const handleLogin = async () => {
     try {
+      if(!validateSubmit()) return;
       setLoading(true);
       const result = await signIn("credentials", { email, password, redirect: false });
       if (result?.error) {
-        toastHelper.error(t(`login:login-fail-${result.status}`));
+        toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
-        toastHelper.success(t('login:login-success'));
+        toastHelper.success(t('authen:login-success'));
         router.push('/');
       }
     } catch (error) {
