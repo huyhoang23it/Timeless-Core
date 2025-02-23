@@ -1,6 +1,12 @@
 {
     "login-title": "Login Page",
-    "welcome-message": "Welcome back, please log in!"
-  
+    "welcome-message": "Welcome back, please log in!",
+    "otp-title" : "OTP Authentication",
+    "otp-input-lable":"Enter the OTP sent to",
+    "otp-input-placeholder":"Enter the OTP",
+    "otp-note":"Note: Please check all email folders (Inbox, Promotions, Spam,...)",
+    "otp-missing":"You didn't receive OTP?",
+    "resend-otp":"Resend OTP",
+    "continue":"Continue"
   }
   

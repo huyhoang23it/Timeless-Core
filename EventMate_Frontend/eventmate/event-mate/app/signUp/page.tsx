@@ -5,6 +5,7 @@ import { Button } from "@/components/common/button";
 import Input from "@/components/common/Input";
 import InputSecret from "@/components/common/InputSecret";
 import { useLanguage } from "@/providers/LanguageProvider";
+import { AuthRepository } from "@/repositories/AuthRepository";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -18,10 +19,16 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isShowChecoOTPModal, setIsShowForgotPasswordModal] = useState<boolean>(false);
+ 
+  const [token, setToken] = useState<string>('');
   const handleSignUp = async () => {
-    setLoading(true);
     try {
-
+      setLoading(true);
+      const res = await AuthRepository.createOTP(email, newPassword);
+      if (!res.error) {
+      setToken(res.data); 
+        setIsShowForgotPasswordModal(true);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -76,11 +83,11 @@ const SignUpPage = () => {
           />
 
         </div>
-    
+
 
         <Button
           className="w-full font-semibold text-white items-center justify-center"
-          label={t('payment:resume-your-plan')}
+          label={t('authen:continue')}
           isLoading={loading}
           onClickButton={handleSignUp}
         ></Button>
@@ -88,19 +95,23 @@ const SignUpPage = () => {
         {/* Điều hướng đến Login */}
         <div className="text-center mt-4">
           <p className="text-gray-600"
-          onClick={() => router.push('/login')}>Already have an account?
-           
+            onClick={() => router.push('/login')}>Already have an account?
+
           </p>
         </div>
 
       </div>
-      <CheckOTPModal 
-     modalProps={{
-      isOpen: isShowChecoOTPModal,
-      closeModal: () => setIsShowForgotPasswordModal(false),
-      title: 'Forgot Password',
-      children: <div>Forgot Password</div>
-      }} />
+      <CheckOTPModal
+        email={email}
+        token={token}
+        setToken={setToken}
+        modalProps={{
+          isOpen: isShowChecoOTPModal,
+          closeModal: () => setIsShowForgotPasswordModal(false),
+          title: t('authen:otp-title'),
+         
+        }}
+      />
     </div>
   );
 }
