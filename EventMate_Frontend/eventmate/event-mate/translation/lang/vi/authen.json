@@ -7,6 +7,15 @@
     "otp-note": "Lưu ý: Vui lòng kiểm tra tất cả thư mục email (Hộp thư đến, Quảng cáo, Spam,...)",
     "otp-missing": "Bạn không nhận được OTP?",
     "resend-otp": "Gửi lại OTP",
-     "continue":"Tiếp tục"
+     "continue":"Tiếp tục",
+
+     "password-validation": {
+        "length": "Mật khẩu phải từ 8 - 32 ký tự.",
+        "lowercase": "Mật khẩu phải chứa ít nhất một chữ thường.",
+        "uppercase": "Mật khẩu phải chứa ít nhất một chữ in hoa.",
+        "number": "Mật khẩu phải chứa ít nhất một số.",
+        "specialChar": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
+        "match": "Mật khẩu nhập lại phải khớp với mật khẩu ban đầu."
+    }
   }
   
