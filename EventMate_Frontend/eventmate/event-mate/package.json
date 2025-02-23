@@ -15,6 +15,7 @@
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.4.0",
     "crypto-js": "^4.2.0",
+    "email-validator": "^2.0.4",
     "framer-motion": "^12.4.3",
     "heroicon": "^0.0.2",
     "i18n": "^0.15.1",
