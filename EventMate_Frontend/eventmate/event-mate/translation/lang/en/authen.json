@@ -1,6 +1,17 @@
 {
     "login-title": "Login Page",
-    "welcome-message": "Welcome back, please log in!"
-  
+    "welcome-message": "Welcome back, please log in!",
+    "forgot-password":"Forgot Password?",
+    "email-input": "Enter your email",
+    "password-input": "Enter your password",
+    "login":"Login",
+    "email":"Email",
+    "password":"Password",
+    "no-account":"Don't have account?",
+    "or":"or",
+    "signup":"Sign Up",
+    "signup-event-organizer":"Sign Up As Event Organizer",
+    "or-sign":"Or Sign Up With",
+    "login-google":"Gmail"
   }
   

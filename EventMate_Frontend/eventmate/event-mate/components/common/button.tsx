@@ -6,6 +6,7 @@ import React, {
     ReactNode,
 } from 'react';
 import ArrowPathIcon from '@heroicons/react/24/outline/ArrowPathIcon';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import classNames from '@/ultilities/common/classNames';
 
 type Props = {
@@ -26,7 +27,7 @@ const mapButtonVariantToClassName = (variant: BUTTON_COMMON_TYPE) => {
             return 'border-none !bg-transparent rounded disabled:opacity-30 disabled:cursor-default';
         }
         case BUTTON_COMMON_TYPE.GOOGLE: {
-            return 'bg-white rounded text-black  hover:bg-slate-200';
+            return 'bg-[#D14836] text-white hover:bg-[#B33627] border-none';
         }
         case BUTTON_COMMON_TYPE.CANCEL: {
             return `transparent border 
@@ -122,6 +123,27 @@ export const Button = ({
     const buttonPresent = () => {
         switch (variant) {
             case BUTTON_COMMON_TYPE.GOOGLE:
+                return (
+                    <button
+                      {...props}
+                      className={classNameCumz}
+                      type={type}
+                      onClick={onClickButton}
+                      disabled={disabled}
+                    >
+                      {isLoading ? (
+                        <div className="loading-btn">
+                          <ArrowPathIcon className="w-6 h-6 ml-2 animate-spin" />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          {/* Sử dụng EnvelopeIcon của Heroicons để đại diện cho Gmail */}
+                          <EnvelopeIcon className="w-5 h-5" />
+                          <span>{label}</span>
+                        </div>
+                      )}
+                    </button>
+                  );
             case BUTTON_COMMON_TYPE.ICON_NO_BORDER:
                 return (
                     <button

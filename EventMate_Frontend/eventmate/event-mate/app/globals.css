@@ -87,5 +87,17 @@ html {
   background-color: var(--color-gray-light);
 }
 
+/* Ẩn nút reveal/clear của Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Ẩn nút reveal/clear của Chrome/Safari */
+input[type="password"]::-webkit-textfield-decoration,
+input[type="password"]::-webkit-clear-button {
+  display: none;
+}
+
 @import "../styles/toast.css"; 
 
