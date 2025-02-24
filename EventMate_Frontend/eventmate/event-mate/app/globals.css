@@ -19,6 +19,11 @@
 html {
   scroll-behavior: smooth;
 }
+html,
+body {
+  height: 100%;
+}
+
 
 :root[class='dark'] {
   --scroll-bar-thumb: #384b68;

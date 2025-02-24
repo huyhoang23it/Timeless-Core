@@ -31,7 +31,7 @@ const SignUpPage = () => {
   });
   const [token, setToken] = useState<string>("");
 
-  // Cập nhật trạng thái kiểm tra mật khẩu khi nhập mớiPassword và confirmPassword
+  // Cập nhật trạng thái kiểm tra mật khẩu khi nhập newPassword và confirmPassword
   useEffect(() => {
     setChecks(validatePassword(newPassword, confirmPassword));
   }, [newPassword, confirmPassword]);
@@ -52,7 +52,6 @@ const SignUpPage = () => {
 
   // Xử lý đăng ký
   const handleSignUp = async () => {
-    // Kiểm tra email có hợp lệ không
     if (!email || !isEmailValid) {
       toastHelper.error(t("errors:validate-email-failed"));
       return;
@@ -77,8 +76,10 @@ const SignUpPage = () => {
   const isFormValid = email && isEmailValid && Object.values(checks).every(Boolean);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100">
-      <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
+    // Thay đổi background của trang thành bg-gray-50 (trắng sữa)
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      {/* Khối form sử dụng bg-gray-50 để tạo cảm giác "trắng sữa" */}
+      <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           {t("authen:signup")}
         </h2>

@@ -36,7 +36,6 @@ const Login = () => {
 
   const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Nếu cần, bạn có thể cho phép rỗng hoặc xem là lỗi (tùy yêu cầu)
     if (value.trim().length === 0) {
       setIsEmailValid(true);
       return;
@@ -48,7 +47,6 @@ const Login = () => {
     }
   };
 
-  // Hàm check email (có kèm thông báo lỗi)
   const validateEmail = (email: string, isNotify: boolean = true) => {
     const isValid = EmailValidator.validate(email);
     if (!isValid && isNotify && email.length !== 0) {
@@ -57,11 +55,8 @@ const Login = () => {
     return isValid;
   };
 
-  // Kiểm tra trước khi submit (cả email & password)
   const validateSubmit = () => {
     let isAllValid = true;
-
-    // Kiểm tra email
     if (!validateEmail(email, false)) {
       setIsEmailValid(false);
       toastHelper.error(t("errors:validate-email-failed"));
@@ -69,8 +64,6 @@ const Login = () => {
     } else {
       setIsEmailValid(true);
     }
-
-    // Kiểm tra password
     if (password.trim().length === 0) {
       setIsPassValid(false);
       toastHelper.error(t("errors:validate-password-required"));
@@ -78,11 +71,9 @@ const Login = () => {
     } else {
       setIsPassValid(true);
     }
-
     return isAllValid;
   };
 
-  // Xử lý login Google
   const handleLoginGoogle = async () => {
     const result = await signIn("google", { callbackUrl: "/" });
     if (result?.error) {
@@ -92,18 +83,15 @@ const Login = () => {
     }
   };
 
-  // Xử lý login
   const handleLogin = async () => {
     try {
       if (!validateSubmit()) return;
-
       setLoading(true);
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
-
       if (result?.error) {
         toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
@@ -120,8 +108,9 @@ const Login = () => {
   const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100">
-      <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
+    // Thay đổi background của trang thành bg-gray-50 (trắng sữa)
+    <div className="flex items-center justify-center bg-gray-50 py-8">
+      <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
           {t("authen:login")}
         </h2>
