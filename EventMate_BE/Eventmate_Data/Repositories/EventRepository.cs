@@ -20,38 +20,55 @@ namespace EventMate_Data.Repositories
         {
             _context = context;
         }
-    
+
         public async Task<IEnumerable<Events>> GetAllEventsAsync()
         {
-            return await _context.Events!.ToListAsync();
+            var events = await _context.Events!.ToListAsync();
+            return events;
         }
+
         public async Task<IEnumerable<Events>> GetEventsByStatusAsync(EventStatus status)
         {
-         return await _context.Events!
-        .Where(e => e.Status == status)
-        .ToListAsync();
+            var events = await _context.Events!
+                .Where(e => e.Status == status)
+                .ToListAsync();
+            return events;
         }
 
         public async Task<IEnumerable<Events>> GetEventsByUserAsync(Guid userId)
         {
-            return await _context.Events!
+            var events = await _context.Events!
                 .Where(e => e.UserId == userId)
                 .ToListAsync();
+            return events;
         }
-
 
         public async Task<Events?> GetEventByIdAsync(Guid eventId)
         {
-            return await _context.Events!.FindAsync(eventId);
+            var eventEntity = await _context.Events!.FindAsync(eventId);
+            return eventEntity;
         }
 
-        public async Task AddEventAsync(Events eventEntity)
+        public async Task<Events?> AddEventAsync(Events eventEntity)
         {
-            await _context.Events!.AddAsync(eventEntity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (!string.IsNullOrEmpty(eventEntity.Img))
+                {
+                    eventEntity.Img = $"https://amzn-eventmate-event.s3.ap-southeast-2.amazonaws.com/{eventEntity.Img}";
+                }
+
+                _context.Events.Add(eventEntity);
+                await _context.SaveChangesAsync();
+                return eventEntity;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
- 
+
         public async Task DeleteEventAsync(Guid eventId)
         {
             var eventEntity = await _context.Events!.FindAsync(eventId);
@@ -67,14 +84,27 @@ namespace EventMate_Data.Repositories
             var eventEntity = await _context.Events!.FindAsync(eventId);
             if (eventEntity == null)
             {
-                return false; 
+                return false;
             }
 
             eventEntity.Status = newStatus;
             _context.Events.Update(eventEntity);
             await _context.SaveChangesAsync();
 
-            return true; 
+            return true;
+        }
+
+        public async Task<Events?> GetEventByNameAsync(string eventName)
+        {
+            var eventEntity = await _context.Events
+                .FirstOrDefaultAsync(e => e.Name == eventName);
+
+            if (eventEntity != null && !string.IsNullOrEmpty(eventEntity.Img))
+            {
+                eventEntity.Img = $"https://amzn-eventmate-event.s3.ap-southeast-2.amazonaws.com/{eventEntity.Img}";
+            }
+
+            return eventEntity;
         }
 
     }

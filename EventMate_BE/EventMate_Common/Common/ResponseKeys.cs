@@ -33,9 +33,16 @@ namespace EventMate_Common.Common
         public const string TokenNotFound = "token-not-found";
         public const string TokenMismatch = "token-mismatch";
         public const string PasswordNotNull = "pass-not-null";
-        public const string OldPassIncorrect = "old-pass-incorrect"; 
+        public const string OldPassIncorrect = "old-pass-incorrect";
 
-
+        //Event
+        public const string FetchEventSuccess = "fetch-event-success";
+        public const string FetchEventError = "cannot-fetch-event";
+        public const string DuplicateEventName = "duplicate-event-name";
+        public const string InvalidEventTime = "invalid-event-time";
+        public const string EventCreationFailed = "event-creation-failed";
+        public const string EventDeleted = "event-deleted";
+        public const string EventUpadated = "event-updated";
 
 
 

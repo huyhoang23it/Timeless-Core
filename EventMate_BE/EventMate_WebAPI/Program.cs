@@ -7,15 +7,15 @@ using EventMate_Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EventMate_Service.Services;
 using EventMate_WebAPI.ModelsMapping;
+using Eventmate_Data.IEventRepository;
 
 using Eventmate_Common.Helpers;
-
-using Eventmate_Data.IEventRepository;
+using EventMate_Service.ScheduleTask;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddSingleton<IHostedService, OTPTask>();
 // Add services to the container.
 builder.Services.AddSingleton<AESHelper>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));

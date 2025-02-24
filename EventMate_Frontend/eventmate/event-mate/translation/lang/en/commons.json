@@ -1,6 +1,5 @@
 {
-    "knowledge-bots": "Knowledge-Bots",
-    "intro-name": "Blockbrain for Business",
-     "email-input": "Enter your email",
-       "password-input": "Enter your password"
+  "otp-sent-successfully": "OTP sent successfully. Please check your email.",
+  "otp-invalid": "Invalid OTP. Please try again.",
+  "otp-expired": "OTP has expired. Please resend OTP."
 }

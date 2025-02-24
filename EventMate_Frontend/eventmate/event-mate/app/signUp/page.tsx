@@ -1,12 +1,14 @@
 "use client";
-
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import CheckOTPModal from "@/components/authen/CheckOTPModal";
 import { Button } from "@/components/common/button";
 import Input from "@/components/common/Input";
 import InputSecret from "@/components/common/InputSecret";
+import { validatePassword } from "@/lib/helpers";
 import { useLanguage } from "@/providers/LanguageProvider";
+import { AuthRepository } from "@/repositories/AuthRepository";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignUpPage = () => {
   const { t } = useLanguage();
@@ -18,10 +20,29 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isShowChecoOTPModal, setIsShowForgotPasswordModal] = useState<boolean>(false);
-  const handleSignUp = async () => {
-    setLoading(true);
-    try {
+  const [checks, setChecks] = useState<{ [key: string]: boolean }>({
+    length: false,
+    uppercase: false,
+    number: false,
+    specialChar: false,
+    math: false
+  });
 
+  useEffect(() => {
+    setChecks(validatePassword(newPassword, confirmPassword));
+  }, [newPassword, confirmPassword]);
+
+  const [token, setToken] = useState<string>('');
+
+
+  const handleSignUp = async () => {
+    try {
+      setLoading(true);
+      const res = await AuthRepository.createOTP(email, newPassword);
+      if (!res.error) {
+        setToken(res.data);
+        setIsShowForgotPasswordModal(true);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -33,7 +54,6 @@ const SignUpPage = () => {
     >
       {/* Container chính với hiệu ứng scale */}
       <div
-
         className=" backdrop-blur-lg shadow-xl rounded-xl px-8 py-10 w-full max-w-md mx-4"
       >
         {/* Tiêu đề */}
@@ -76,11 +96,25 @@ const SignUpPage = () => {
           />
 
         </div>
-    
+        
+        <ul>
+          {[
+            { key: "length", message: t('authen:password-validation:length') },
+            { key: "uppercase", message: t('authen:password-validation:uppercase') },
+            { key: "number", message: t('authen:password-validation:number')  },
+            { key: "specialChar", message: t('authen:password-validation:specialChar') },
+            { key: "match", message: t('authen:password-validation:match') }
+          ].map((item) => (
+            <li key={item.key} style={{ color: checks[item.key] ? "green" : "red" }}>
+              {checks[item.key] ?  <CheckCircleIcon className="w-5 h-5 mr-2" /> :  <XCircleIcon className="w-5 h-5 mr-2" />} {item.message}
+            </li>
+          ))}
+        </ul>
 
         <Button
           className="w-full font-semibold text-white items-center justify-center"
-          label={t('payment:resume-your-plan')}
+          label={t('authen:continue')}
+          disabled={!Object.values(checks).every(Boolean)}
           isLoading={loading}
           onClickButton={handleSignUp}
         ></Button>
@@ -88,19 +122,23 @@ const SignUpPage = () => {
         {/* Điều hướng đến Login */}
         <div className="text-center mt-4">
           <p className="text-gray-600"
-          onClick={() => router.push('/login')}>Already have an account?
-           
+            onClick={() => router.push('/login')}>Already have an account?
+
           </p>
         </div>
 
       </div>
-      <CheckOTPModal 
-     modalProps={{
-      isOpen: isShowChecoOTPModal,
-      closeModal: () => setIsShowForgotPasswordModal(false),
-      title: 'Forgot Password',
-      children: <div>Forgot Password</div>
-      }} />
+      <CheckOTPModal
+        email={email}
+        token={token}
+        setToken={setToken}
+        modalProps={{
+          isOpen: isShowChecoOTPModal,
+          closeModal: () => setIsShowForgotPasswordModal(false),
+          title: t('authen:otp-title'),
+
+        }}
+      />
     </div>
   );
 }

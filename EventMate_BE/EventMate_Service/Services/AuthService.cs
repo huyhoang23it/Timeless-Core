@@ -148,8 +148,10 @@ namespace EventMate_Service.Services
         {
             try
             {
-                var otp = await authRepository.CheckOTP(OTPCode,token); 
-                var emailPassword = _AESHelper.Decrypt(token);
+                var otp = await authRepository.CheckOTP(OTPCode,token);
+                if (otp != null)
+                {
+                    var emailPassword = _AESHelper.Decrypt(token);
                 var email = emailPassword.Split("::")[0];
                 var password = emailPassword.Split("::")[1];
                 var user = new User
@@ -157,8 +159,11 @@ namespace EventMate_Service.Services
                     Email = email,
                     Password = password,
                 };
-                //await authRepository.RemoveOTP(OTPCode);
-                await CreateNewAccount(user);
+                //await authRepository.RemoveOTP(OTPCode);       
+                    await CreateNewAccount(user);
+                   await authRepository.RemoveOTP(OTPCode);
+                }
+               
                 return otp;
             }
           
@@ -292,9 +297,18 @@ namespace EventMate_Service.Services
                 throw new Exception(e.Message);
             }
         }
+        public async Task RemoveOTPExpired()
+        {
+            try
+            {
+                await authRepository.RemoveOTPExpired();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
 
-
-
+        }
     }
 
 
