@@ -21,7 +21,7 @@ const SignUpPage = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [isShowCheckOTPModal, setIsShowCheckOTPModal] = useState<boolean>(true);
+  const [isShowCheckOTPModal, setIsShowCheckOTPModal] = useState<boolean>(false);
   const [checks, setChecks] = useState<{ [key: string]: boolean }>({
     length: false,
     uppercase: false,
