@@ -12,6 +12,8 @@
     "signup":"Sign Up",
     "signup-event-organizer":"Sign Up As Event Organizer",
     "or-sign":"Or Sign Up With",
-    "login-google":"Gmail"
+    "login-google":"Gmail",
+    "enter-your-email-to-reset-password":"Enter your email to reset password",
+    "reset-password":"Reset password"
   }
   

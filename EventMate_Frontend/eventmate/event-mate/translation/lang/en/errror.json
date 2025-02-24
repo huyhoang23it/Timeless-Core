@@ -1,0 +1,4 @@
+{
+  "validate-password-required": "Password must not be null",
+  "validate-email-failed":"Email must be correct format"
+}

@@ -6,7 +6,7 @@ import React, {
     ReactNode,
 } from 'react';
 import ArrowPathIcon from '@heroicons/react/24/outline/ArrowPathIcon';
-import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { FcGoogle } from 'react-icons/fc';
 import classNames from '@/ultilities/common/classNames';
 
 type Props = {
@@ -27,7 +27,7 @@ const mapButtonVariantToClassName = (variant: BUTTON_COMMON_TYPE) => {
             return 'border-none !bg-transparent rounded disabled:opacity-30 disabled:cursor-default';
         }
         case BUTTON_COMMON_TYPE.GOOGLE: {
-            return 'bg-[#D14836] text-white hover:bg-[#B33627] border-none';
+            return 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-gray-300';
         }
         case BUTTON_COMMON_TYPE.CANCEL: {
             return `transparent border 
@@ -137,8 +137,8 @@ export const Button = ({
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          {/* Sử dụng EnvelopeIcon của Heroicons để đại diện cho Gmail */}
-                          <EnvelopeIcon className="w-5 h-5" />
+                          {/* Sử dụng icon Google từ react-icons */}
+                          <FcGoogle className="w-6 h-6" />
                           <span>{label}</span>
                         </div>
                       )}

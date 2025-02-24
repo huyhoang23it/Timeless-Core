@@ -7,10 +7,10 @@ import ForgotpasswordModal from "@/components/authen/ForgotpasswordModal";
 import Input from "@/components/common/Input";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import InputSecret from "@/components/common/InputSecret";
 import { BUTTON_COMMON_TYPE } from "@/constants/constant";
-import * as EmailValidator from 'email-validator';
+import * as EmailValidator from "email-validator";
 
 const Login = () => {
   const { t } = useLanguage();
@@ -20,48 +20,95 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const validateEmail = (email: string, isNotify: boolean = true) => {
-    if (!EmailValidator.validate(email)) {
-      if (isNotify && email.length !== 0) {
-        toastHelper.error(t('errors:validate-email-failed'));
-      }
-      return false;
-    }
-    return true;
-  };
+  // Quản lý trạng thái valid
+  const [isPasslValid, setIsPassValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
-  const validateSubmit = () => {
-    let checkSubmit = false;
-    if (validateEmail(email)) {
-      checkSubmit = true;
-    }
-    if (password.length > 0) {
-      checkSubmit = true;
+  // Kiểm tra password khi blur
+  const handlePasswordBlur = (e: any) => {
+    const value = e.target.value;
+    if (value.trim().length === 0) {
+      setIsPassValid(false);
     } else {
-      toastHelper.error(t('errors:validate-password-required'));
+      setIsPassValid(true);
     }
-    return checkSubmit;
   };
 
+  const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Nếu cần, bạn có thể cho phép rỗng hoặc xem là lỗi (tùy yêu cầu)
+    if (value.trim().length === 0) {
+      setIsEmailValid(true);
+      return;
+    }
+    const isValid = EmailValidator.validate(value);
+    setIsEmailValid(isValid);
+    if (!isValid) {
+      toastHelper.error(t("errors:validate-email-failed"));
+    }
+  };
+
+  // Hàm check email (có kèm thông báo lỗi)
+  const validateEmail = (email: string, isNotify: boolean = true) => {
+    const isValid = EmailValidator.validate(email);
+    if (!isValid && isNotify && email.length !== 0) {
+      toastHelper.error(t("errors:validate-email-failed"));
+    }
+    return isValid;
+  };
+
+  // Kiểm tra trước khi submit (cả email & password)
+  const validateSubmit = () => {
+    let isAllValid = true;
+
+    // Kiểm tra email
+    if (!validateEmail(email, false)) {
+      setIsEmailValid(false);
+      toastHelper.error(t("errors:validate-email-failed"));
+      isAllValid = false;
+    } else {
+      setIsEmailValid(true);
+    }
+
+    // Kiểm tra password
+    if (password.trim().length === 0) {
+      setIsPassValid(false);
+      toastHelper.error(t("errors:validate-password-required"));
+      isAllValid = false;
+    } else {
+      setIsPassValid(true);
+    }
+
+    return isAllValid;
+  };
+
+  // Xử lý login Google
   const handleLoginGoogle = async () => {
     const result = await signIn("google", { callbackUrl: "/" });
     if (result?.error) {
       toastHelper.error(t(`authen:login-fail-${result.status}`));
     } else {
-      toastHelper.success(t('authen:login-success'));
+      toastHelper.success(t("authen:login-success"));
     }
   };
 
+  // Xử lý login
   const handleLogin = async () => {
     try {
       if (!validateSubmit()) return;
+
       setLoading(true);
-      const result = await signIn("credentials", { email, password, redirect: false });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
       if (result?.error) {
         toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
-        toastHelper.success(t('authen:login-success'));
-        router.push('/');
+        toastHelper.success(t("authen:login-success"));
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
@@ -75,30 +122,57 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100">
       <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">{t("authen:login")}</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          {t("authen:login")}
+        </h2>
 
         <div className="space-y-4">
+          {/* Email */}
           <div>
-            <label className="block mb-2 font-medium text-gray-700">{t("authen:email")}</label>
+            <label className="block mb-2 font-medium text-gray-700">
+              {t("authen:email")}
+            </label>
             <Input
-              className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
+              className={`h-12 w-full rounded-lg pr-4 border ${isEmailValid
+                  ? "border-gray-300 focus:border-primary-500"
+                  : "border-red-500 focus:border-red-600"
+                }`}
               type="text"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={t('authen:email-input')}
+              onBlur={handleEmailBlur}
+              placeholder={t("authen:email-input")}
             />
+            {!isEmailValid && (
+              <p className="text-red-500 text-sm mt-1">
+                {t("errors:validate-email-failed")}
+              </p>
+            )}
           </div>
+
+          {/* Password */}
           <div>
-            <label className="block mb-2 font-medium text-gray-700">{t("authen:password")}</label>
+            <label className="block mb-2 font-medium text-gray-700">
+              {t("authen:password")}
+            </label>
             <InputSecret
-              className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
+              className={`h-12 w-full rounded-lg pr-4 border ${isPasslValid
+                  ? "border-gray-300 focus:border-primary-500"
+                  : "border-red-500 focus:border-red-600"
+                }`}
               type="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={t('authen:password-input')}
+              onBlur={handlePasswordBlur}
+              placeholder={t("authen:password-input")}
             />
+            {!isPasslValid && (
+              <p className="text-red-500 text-sm mt-1">
+                {t("errors:validate-password-required")}
+              </p>
+            )}
           </div>
         </div>
 
@@ -107,13 +181,13 @@ const Login = () => {
             className="text-sm text-blue-600 hover:underline"
             onClick={() => setIsShowForgotPasswordModal(true)}
           >
-            {t('authen:forgot-password')}
+            {t("authen:forgot-password")}
           </button>
         </div>
 
         <Button
           className="mt-6 w-full font-semibold text-white"
-          label={t('authen:login')}
+          label={t("authen:login")}
           isLoading={loading}
           onClickButton={handleLogin}
         />
@@ -122,11 +196,11 @@ const Login = () => {
           <p className="text-gray-600">{t("authen:no-account")}</p>
           <p className="text-gray-600 mt-1">
             <a href="#" className="text-blue-600 hover:underline font-medium">
-            {t("authen:signup")}
+              {t("authen:signup")}
             </a>{" "}
             {t("authen:or")}{" "}
             <a href="#" className="text-blue-600 hover:underline font-medium">
-            {t("authen:signup-event-organizer")}
+              {t("authen:signup-event-organizer")}
             </a>
           </p>
         </div>
@@ -139,7 +213,7 @@ const Login = () => {
 
         <Button
           className="w-full font-semibold text-white"
-          label={t('authen:login-google')}
+          label={t("authen:login-google")}
           variant={BUTTON_COMMON_TYPE.GOOGLE}
           isLoading={loading}
           onClickButton={handleLoginGoogle}
@@ -150,8 +224,8 @@ const Login = () => {
             modalProps={{
               isOpen: isShowForgotPasswordModal,
               closeModal: () => setIsShowForgotPasswordModal(false),
-              title: 'Forgot Password',
-              children: <div>Forgot Password</div>,
+              title: "Forgot Password",
+              children: <div>{t("authen:forgot-password")}</div>,
             }}
           />
         )}
