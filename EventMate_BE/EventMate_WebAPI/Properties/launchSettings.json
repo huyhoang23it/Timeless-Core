@@ -19,8 +19,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AWS_ACCESS_KEY_ID": "AKIAZ24IS6TU22LIE3SH",
-        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_ACCESS_KEY_ID": "AKIAZ24IS6TUQPYYERH4",
+        "AWS_SECRET_ACCESS_KEY": "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",
         "AWS_DEFAULT_REGION": "ap-southeast-2"
       },
       "dotnetRunMessages": true,
