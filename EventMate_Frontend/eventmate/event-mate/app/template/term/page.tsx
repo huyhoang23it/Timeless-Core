@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { X } from "lucide-react";
 
 export default function TermsModal() {
   const [isOpen, setIsOpen] = useState(true);
@@ -12,7 +11,6 @@ export default function TermsModal() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/bg-01.jpg')" }}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -25,7 +23,6 @@ export default function TermsModal() {
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 transition"
           onClick={() => setIsOpen(false)}
         >
-          <X className="w-6 h-6" />
         </button>
 
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">

@@ -1,4 +1,6 @@
 {
+    "validate-phone-required":"Phone number is required",
+    "validate-phone-failed":"Invalid phone number",
     "validate-password-required": "Password must not be null",
     "validate-email-failed": "Email must be correct format",
     

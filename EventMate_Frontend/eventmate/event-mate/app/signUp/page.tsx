@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import CheckOTPModal from "@/components/authen/CheckOTPModal";
+import TermsModal from "@/components/authen/TermModal";
 import { Button } from "@/components/common/button";
 import Input from "@/components/common/Input";
 import InputSecret from "@/components/common/InputSecret";
@@ -16,12 +17,15 @@ const SignUpPage = () => {
   const { t } = useLanguage();
   const router = useRouter();
 
+  // Các state chính
   const [email, setEmail] = useState<string>("");
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isShowCheckOTPModal, setIsShowCheckOTPModal] = useState<boolean>(false);
+  const [agree, setAgree] = useState<boolean>(false);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [checks, setChecks] = useState<{ [key: string]: boolean }>({
     length: false,
     uppercase: false,
@@ -72,13 +76,15 @@ const SignUpPage = () => {
     }
   };
 
-  // Form hợp lệ khi email không rỗng, hợp lệ và các điều kiện mật khẩu đều đạt
-  const isFormValid = email && isEmailValid && Object.values(checks).every(Boolean);
+  // Form hợp lệ khi email không rỗng, hợp lệ, mật khẩu đạt các tiêu chí và checkbox "I agree" được tick
+  const isFormValid =
+    email &&
+    isEmailValid &&
+    Object.values(checks).every(Boolean) &&
+    agree;
 
   return (
-    // Thay đổi background của trang thành bg-gray-50 (trắng sữa)
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      {/* Khối form sử dụng bg-gray-50 để tạo cảm giác "trắng sữa" */}
       <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           {t("authen:signup")}
@@ -157,27 +163,60 @@ const SignUpPage = () => {
           ))}
         </ul>
 
-        <Button
-          className="w-full font-semibold text-white py-3"
-          label={t("authen:continue")}
-          disabled={!isFormValid}
-          isLoading={loading}
-          onClickButton={handleSignUp}
-        />
+        {/* Checkbox "I agree" với link gọi modal */}
+        <div className="space-y-4">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="agree"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="agree" className="text-gray-700 text-sm cursor-pointer">
+              {t("authen:agree-to")}{" "}
+              <a
+                href="#"
+                className="text-blue-600 hover:underline font-medium"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowTermsModal(true);
+                }}
+              >
+                {t("authen:term")}
+              </a>
+            </label>
+          </div>
 
-        <div className="text-center mt-4">
-          <p
-            className="text-gray-600 cursor-pointer"
-            onClick={() => router.push("/login")}
-          >
-            {t("authen:already-have-account")}{" "}
-            <a className="text-blue-600 hover:underline font-medium">
-              {t("authen:login")}
-            </a>{" "}
-          </p>
+          {showTermsModal && (
+            <TermsModal
+              modalProps={{
+                isOpen: showTermsModal,
+                closeModal: () => setShowTermsModal(false),
+                title: t("authen:terms-title"),
+              }}
+            />
+          )}
+
+          <Button
+            className="w-full font-semibold text-white py-3"
+            label={t("authen:continue")}
+            disabled={!isFormValid}
+            isLoading={loading}
+            onClickButton={handleSignUp}
+          />
+          <div className="text-center">
+            <p className="text-gray-600 cursor-pointer" onClick={() => router.push("/login")}>
+              {t("authen:already-have-account")}{" "}
+              <a className="text-blue-600 hover:underline font-medium">
+                {t("authen:login")}
+              </a>
+            </p>
+          </div>
         </div>
       </div>
 
+      {/* OTP Modal */}
       <CheckOTPModal
         email={email}
         token={token}
@@ -188,6 +227,15 @@ const SignUpPage = () => {
           title: t("authen:otp-title"),
         }}
       />
+      {/* Terms Modal */}
+      <TermsModal
+        modalProps={{
+          isOpen: showTermsModal,
+          closeModal: () => setShowTermsModal(false),
+          title: t("authen:terms-title"),
+        }}
+      />
+
     </div>
   );
 };

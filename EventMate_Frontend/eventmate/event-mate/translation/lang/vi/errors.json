@@ -1,4 +1,6 @@
 {
+    "validate-phone-required":"Số điện thoại không được để trống",
+    "validate-phone-failed":"Số điện thoại không đúng định dạng",
     "validate-password-required": "Mật khẩu không được để trống",
     "validate-email-failed": "Email phải đúng định dạng",
 
