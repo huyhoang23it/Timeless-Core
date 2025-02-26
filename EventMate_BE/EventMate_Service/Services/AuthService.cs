@@ -144,7 +144,7 @@ namespace EventMate_Service.Services
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<OTPAuthen> VerifyOTP(string OTPCode,string token)
+        public async Task<OTPAuthen> VerifyOTP(string OTPCode,string token, User userRequest)
         {
             try
             {
@@ -158,6 +158,9 @@ namespace EventMate_Service.Services
                 {
                     Email = email,
                     Password = password,
+                    CompanyName = userRequest.CompanyName,
+                    Address = userRequest.Address,
+                    Phone = userRequest.Phone,
                 };
                 //await authRepository.RemoveOTP(OTPCode);       
                     await CreateNewAccount(user);

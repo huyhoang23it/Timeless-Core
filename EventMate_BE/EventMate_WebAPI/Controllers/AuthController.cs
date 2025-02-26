@@ -110,7 +110,8 @@ namespace EventMate_WebAPI.Controllers
         {
             try
             {
-                var otp = await _authService.VerifyOTP(verifyOTPRequest.OTP, verifyOTPRequest.Token);
+                var userRequest = _mapper.Map<User>(verifyOTPRequest);
+                var otp = await _authService.VerifyOTP(verifyOTPRequest.OTP, verifyOTPRequest.Token, userRequest);
                 if (otp == null)
                 {
                     return BadRequest(new ApiResponse<string>(400, ResponseKeys.OtpInvalid, "OTP is not valid"));
@@ -236,8 +237,7 @@ namespace EventMate_WebAPI.Controllers
             }
 
         }
-
-
+    
     }
 
 }
