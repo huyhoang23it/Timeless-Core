@@ -9,6 +9,9 @@ import Input from "@/components/common/Input";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import InputSecret from "@/components/common/InputSecret";
+import { BUTTON_COMMON_TYPE } from "@/constants/constant";
+import * as EmailValidator from 'email-validator';
 const Login = () => {
   const { t } = useLanguage();
   const router = useRouter();
@@ -17,14 +20,47 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const validateEmail = (email: string, isNotify: boolean = true) => {
+    if (!EmailValidator.validate(email)) {
+      if (isNotify && email.length != 0) {
+        toastHelper.error(t('errors:validate-email-failed'));
+      }
+      return false;
+    }
+    return true;
+  };
+  const validateSubmit = () => {
+    let checkSubmit = false;
+    if (validateEmail(email)) {
+    checkSubmit = true
+    }
+    if (password.length > 0) {
+    
+     checkSubmit = true
+    }else{
+        toastHelper.error(t('errors:validate-password-required'));
+    }
+    return checkSubmit;
+  };
+  const handleLoginGoogle = async () => {
+
+    const result = await signIn("google", { callbackUrl: "/" });
+    if (result?.error) {
+      toastHelper.error(t(`authen:login-fail-${result.status}`));
+    } else {
+      toastHelper.success(t('authen:login-success'));
+
+    }
+  }
   const handleLogin = async () => {
     try {
+      if(!validateSubmit()) return;
       setLoading(true);
       const result = await signIn("credentials", { email, password, redirect: false });
       if (result?.error) {
-        toastHelper.error(t(`login:login-fail-${result.status}`));
+        toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
-        toastHelper.success(t('login:login-success'));
+        toastHelper.success(t('authen:login-success'));
         router.push('/');
       }
     } catch (error) {
@@ -62,7 +98,7 @@ const Login = () => {
             placeholder={t('email-input')}
           />
           <label className="block mb-1 font-medium text-gray-700">Password</label>
-          <Input
+          <InputSecret
             className=" !h-[44px] md:w-[400px] w-[350px] !rounded-xl pr-8"
             type="text"
             name="password"
@@ -125,15 +161,14 @@ const Login = () => {
 
         {/* Nút mạng xã hội */}
         <div className="flex justify-center space-x-4">
-          {/* Nút Gmail */}
-          {/* <motion.a
-            href="#"
-            className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
-            whileHover={{ scale: 1.05, boxShadow: "0px 4px 10px rgba(255, 0, 0, 0.3)" }}
-          >
-            <SiGoogle className="w-5 h-5" />
-            <span>Google</span>
-          </motion.a> */}
+
+          <Button
+            className="w-full font-semibold text-white items-center justify-center"
+            label={t('payment:resume-your-plan')}
+            variant={BUTTON_COMMON_TYPE.GOOGLE}
+            isLoading={loading}
+            onClickButton={handleLoginGoogle}
+          ></Button>
         </div>
         {isShowForgotPasswordModal && (
           <ForgotpasswordModal

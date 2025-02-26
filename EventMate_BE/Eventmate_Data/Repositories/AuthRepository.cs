@@ -189,10 +189,20 @@ namespace EventMate_Data.Repositories
         public async Task RemoveOTP(string otpCode)
         {
             var otp = _context.OTPAuthens.FirstOrDefaultAsync(o => o.OTPCode == otpCode);
+            if (otp == null) return;
              _context.Remove(otp);
             await _context.SaveChangesAsync();
 
 
+        }
+        public async Task RemoveOTPExpired()
+        {
+            var otps = _context.OTPAuthens.Where(o => o.ExpireTime > DateTime.UtcNow).ToList();
+            if(otps.Count > 0)
+            {
+                 _context.RemoveRange(otps);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

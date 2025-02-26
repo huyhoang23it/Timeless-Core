@@ -13,9 +13,36 @@ export const AuthRepository = createRepository({
     return response;
   },
 
-  getNew: async (fetch) => {
-    const response = await fetch("https://localhost:7227/api/News", {
-      method: "GET",
+  forgotPassword: async (fetch, data: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/forgot-password`, {
+      method: "POST",
+      data,
+
+
+    });
+    return response;
+  },
+
+  createOTP: async (fetch, email: string, password: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/create-otp`, {
+      method: "POST",
+      data: {
+        email,
+        password,
+      },
+
+    });
+    return response;
+  },
+
+  verifyOTP: async (fetch, token: string, otp: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/verify-otp`, {
+      method: "POST",
+      data: {
+        otp,
+        token,
+      },
+
     });
     return response;
   }

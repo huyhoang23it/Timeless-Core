@@ -106,11 +106,11 @@ namespace EventMate_WebAPI.Controllers
             }
         }
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOTP(string OTPCode, string token)
+        public async Task<IActionResult> VerifyOTP(VerifyOTPRequest verifyOTPRequest)
         {
             try
             {
-                var otp = await _authService.VerifyOTP(OTPCode, token);
+                var otp = await _authService.VerifyOTP(verifyOTPRequest.OTP, verifyOTPRequest.Token);
                 if (otp == null)
                 {
                     return BadRequest(new ApiResponse<string>(400, ResponseKeys.OtpInvalid, "OTP is not valid"));
@@ -149,12 +149,11 @@ namespace EventMate_WebAPI.Controllers
 
         }
 
-        [HttpPost("forgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             try
             {
-                IActionResult response;
 
                 var isUser = await _authService.IsExistUser(email);
 
