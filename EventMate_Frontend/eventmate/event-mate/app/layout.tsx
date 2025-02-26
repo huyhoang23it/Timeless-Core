@@ -2,9 +2,10 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-import 'react-toastify/dist/ReactToastify.css';
-import GlobalProviders from '@/providers/GlobalProviders';
+import "react-toastify/dist/ReactToastify.css";
+import GlobalProviders from "@/providers/GlobalProviders";
+import Header from "@/components/header/header";
+import Footer from "@/components/footer/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,25 +17,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-auto`}>
         <GlobalProviders>
-          {children}
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
         </GlobalProviders>
-
       </body>
-    </html >
-
-
+    </html>
   );
 }

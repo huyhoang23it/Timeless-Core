@@ -1,30 +1,28 @@
 import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react';
-import { EyeIcon } from "@heroicons/react/24/outline";
-import { EyeSlashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const InputSecret = ({
     ...props
 }: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
-       const [isRevealPassword, setIsRevealPassword] = useState<boolean>(false);
-       const togglePassword = () => {
+    const [isRevealPassword, setIsRevealPassword] = useState<boolean>(false);
+    const togglePassword = () => {
         setIsRevealPassword((prevState) => !prevState);
     };
     return (
-        <div className="h-12 flex items-center focus:outline-none border rounded-lg border-slate-300 hover:border-primary-500 active:border-primary-500">
+        <div className="relative">
             <input
                 {...props}
-                className={` ${props.className} bg-transparent px-4 py-2 h-10  flex items-center gap-3`}
+                type={isRevealPassword ? "text" : "password"}
+                className={`w-full bg-white px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-primary-500 ${props.className}`}
             />
-            {isRevealPassword ? (
-                <EyeIcon className='w-5 h-5' onClick={togglePassword}/>
-            ) : (
-
-                <EyeSlashIcon className='w-5 h-5'  onClick={togglePassword}/>
-            )}
-
+            <div className="absolute inset-y-0 right-3 flex items-center cursor-pointer" onClick={togglePassword}>
+                {isRevealPassword ? (
+                    <EyeIcon className='w-5 h-5 text-gray-600' />
+                ) : (
+                    <EyeSlashIcon className='w-5 h-5 text-gray-600' />
+                )}
+            </div>
         </div>
-
-
     );
 };
 

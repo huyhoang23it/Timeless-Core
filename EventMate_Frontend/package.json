@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "crypto-js": "^4.2.0",
+    "preline": "^2.7.0",
+    "react-toastify": "^11.0.3"
+  }
+}

@@ -19,6 +19,11 @@
 html {
   scroll-behavior: smooth;
 }
+html,
+body {
+  height: 100%;
+}
+
 
 :root[class='dark'] {
   --scroll-bar-thumb: #384b68;
@@ -85,6 +90,18 @@ html {
   transition: 0.2s ease;
   opacity: 0.9;
   background-color: var(--color-gray-light);
+}
+
+/* Ẩn nút reveal/clear của Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Ẩn nút reveal/clear của Chrome/Safari */
+input[type="password"]::-webkit-textfield-decoration,
+input[type="password"]::-webkit-clear-button {
+  display: none;
 }
 
 @import "../styles/toast.css"; 

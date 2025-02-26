@@ -7,6 +7,7 @@ import viSuccess from "../lang/vi/success.json";
 import enError from "../lang/en/errors.json";
 import viError from "../lang/vi/errors.json";
 
+
 export const resources = {
   en: {
     commons: enCommons,
@@ -15,7 +16,8 @@ export const resources = {
     errors: enError
   },
   vi: {
-    commons:viCommons,
+
+    commons: viCommons,
     authen: viAuth,
     success: viSuccess,
     errors: viError

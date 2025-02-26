@@ -1,14 +1,13 @@
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 
-const Input = ({
-    ...props
-}: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
+const Input = ({ className, ...props }: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
     return (
-        <input
-            {...props}
-            className={` ${props.className} bg-transparent px-4 py-2 h-12 focus:outline-none border rounded-lg border-slate-300 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 active:border-primary-500 flex items-center gap-3`}
-        />
+      <input
+        {...props}
+        className={`w-full bg-white px-4 py-2 rounded-lg focus:outline-none ${className}`}
+      />
     );
-};
-
-export default Input;
+  };
+  
+  export default Input;
+  

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
+const preline = require("preline/plugin");
 module.exports = {
     mode: 'jit',
     content: [
-        './pages/**/*.{js,ts,jsx,tsx,mdx}',
-        './components/**/*.{js,ts,jsx,tsx,mdx}',
-        './app/**/*.{js,ts,jsx,tsx,mdx}',
-        'node_modules/preline/dist/*.js',
+        "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+        "./components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./node_modules/preline/dist/**/*.js",
     ],
     darkMode: 'class',
     theme: {
@@ -181,7 +182,7 @@ module.exports = {
         },
     },
     plugins: [
-        require('preline/plugin'),
+        preline,
         function ({ addUtilities }) {
             addUtilities(
                 {
