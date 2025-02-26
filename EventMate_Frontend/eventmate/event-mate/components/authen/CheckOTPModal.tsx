@@ -13,6 +13,11 @@ type CheckOTPModalProps = {
   token: string;
   modalProps: ModalProps;
   setToken: (token: string) => void;
+  companyName?: string;
+  phoneNumber?: string;
+  address?: string;
+  businessLicense?: File;
+  isSignUpOrganization?: boolean;
 };
 
 const CheckOTPModal = ({
@@ -20,6 +25,7 @@ const CheckOTPModal = ({
   token,
   setToken,
   modalProps,
+  isSignUpOrganization,
 }: CheckOTPModalProps) => {
   const { t } = useLanguage();
   const router = useRouter();
@@ -53,7 +59,10 @@ const CheckOTPModal = ({
     if (!validateOTP(otp)) return;
     setLoading(true);
     try {
-      const res = await AuthRepository.verifyOTP(token, otp);
+      const res = isSignUpOrganization 
+      ? await AuthRepository.verifyOTP(token, otp) 
+      : await AuthRepository.verifyOTPOrganization(token, otp);
+
       if (!res.error) {
         router.push("/login");
         modalProps.closeModal();
@@ -107,9 +116,8 @@ const CheckOTPModal = ({
         {/* Input OTP */}
         <div className="mt-4">
           <Input
-            className={`h-10 w-full rounded-lg border ${
-              error ? "border-red-500" : "border-gray-300"
-            } focus:border-primary-500 text-center text-lg tracking-widest`}
+            className={`h-10 w-full rounded-lg border ${error ? "border-red-500" : "border-gray-300"
+              } focus:border-primary-500 text-center text-lg tracking-widest`}
             type="text"
             name="otp"
             maxLength={6}
