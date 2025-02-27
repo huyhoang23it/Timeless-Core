@@ -39,11 +39,11 @@
   "continue": "Continue",
 
   "password-validation": {
-    "length": "Password must be between 8 and 32 characters.",
-    "lowercase": "Password must contain at least one lowercase letter.",
-    "uppercase": "Password must contain at least one uppercase letter.",
-    "number": "Password must contain at least one number.",
-    "specialChar": "Password must contain at least one special character.",
-    "match": "The confirmation password must match the original password."
+    "Title": "Password should follow these rule",
+    "length": "8 - 32 characters",
+    "lowercase": "At least one lowercase letter.",
+    "uppercase": "At least one uppercase letter.",
+    "number": "At least one number.",
+    "specialChar": "At least one special character."
   }
 }
