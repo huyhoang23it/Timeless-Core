@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace EventMate_Data.Entities
 {
-    public class Plan_Details
+    public class Activity
     {
         [Key]
-        public Guid PlanDetailsId { get; set; }
+        public Guid ActivityId { get; set; }
         [Required]
         public Guid PlanId { get; set; }
         
@@ -20,10 +20,19 @@ namespace EventMate_Data.Entities
         public string Content { get; set; } = string.Empty;
 
         public DateTime? Schedule { get; set; }
+        // Thêm các trường mới
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public Guid CreatedBy { get; set; }
+        public string? Category { get; set; }
 
         [Required]
         public PlanDetailStatus Status { get; set; }
         [ForeignKey("PlanId")] public virtual Plans Plan { get; set; }
+
+        [ForeignKey("CreatedBy")]
+        public virtual User User { get; set; }
 
     }
 }
