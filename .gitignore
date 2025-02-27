@@ -25,5 +25,8 @@ FoodDeliver_API/FoodDeliver_API/appsettings.json
 
 node_modules/
 Migrations/
+appsettings.json
 
 
+
+/EventMate_BE/EventMate_WebAPI/appsettings.json
