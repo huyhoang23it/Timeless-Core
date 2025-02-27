@@ -26,6 +26,7 @@ const SignUpEventOrganizer = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [companyName, setCompanyName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
   const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
   const [businessLicense, setBusinessLicense] = useState<File | null>(null);
   const [agree, setAgree] = useState<boolean>(false);
@@ -210,6 +211,25 @@ const SignUpEventOrganizer = () => {
                   </p>
                 )}
               </div>
+                 {/* Address */}
+                 <div>
+                <label className="block mb-1 font-medium text-gray-700">{t("authen:phone-number")}</label>
+                <Input
+                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
+                  type="text"
+                  name="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  onBlur={handlePhoneBlur}
+                  placeholder={t("authen:phone-input")}
+                />
+                {!isPhoneValid && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {t("errors:validate-phone-failed")}
+                  </p>
+                )}
+              </div>
+              
               {/* Business License */}
               <div>
                 <label className="block mb-1 font-medium text-gray-700">{t("authen:license")}</label>
@@ -330,6 +350,10 @@ const SignUpEventOrganizer = () => {
         email={email}
         token={token}
         setToken={setToken}
+        phoneNumber={phoneNumber}
+        address={companyName}
+        companyName={companyName}
+        businessLicense={businessLicense || undefined}
         modalProps={{
           isOpen: isShowCheckOTPModal,
           closeModal: () => setIsShowCheckOTPModal(false),

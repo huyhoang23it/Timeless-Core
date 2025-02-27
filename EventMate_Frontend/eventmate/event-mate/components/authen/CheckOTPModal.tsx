@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Modal, { ModalProps } from "../basic/Modal";
 import Input from "../common/Input";
 import { useLanguage } from "@/providers/LanguageProvider";
@@ -7,6 +7,7 @@ import { Button } from "../common/button";
 import { AuthRepository } from "@/repositories/AuthRepository";
 import { useRouter } from "next/navigation";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { debounce } from "lodash";
 
 type CheckOTPModalProps = {
   email: string;
@@ -25,7 +26,11 @@ const CheckOTPModal = ({
   token,
   setToken,
   modalProps,
-  isSignUpOrganization,
+  // phoneNumber,
+  // companyName,
+  // address,
+  // businessLicense,
+  // isSignUpOrganization,
 }: CheckOTPModalProps) => {
   const { t } = useLanguage();
   const router = useRouter();
@@ -35,7 +40,6 @@ const CheckOTPModal = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingResend, setLoadingResend] = useState<boolean>(false);
 
-  // Validate OTP: chỉ cho phép số và phải đủ 6 ký tự
   const validateOTP = (value: string): boolean => {
     if (!/^\d*$/.test(value)) {
       setError(t("errors:otp-invalid"));
@@ -49,36 +53,40 @@ const CheckOTPModal = ({
     return true;
   };
 
+  const debouncedValidate = useCallback(
+    debounce((keyword: string) => {
+      validateOTP(keyword);
+    }, 600),
+    []
+);
+
   const handleChangeOTP = (e: any) => {
     const value = e.target.value;
     setOTP(value);
-    validateOTP(value);
+    debouncedValidate.cancel();
+    debouncedValidate(value);
+   
   };
 
   const handleCheckOTP = async () => {
     if (!validateOTP(otp)) return;
     setLoading(true);
     try {
-      const res = isSignUpOrganization 
-      ? await AuthRepository.verifyOTP(token, otp) 
-      : await AuthRepository.verifyOTPOrganization(token, otp);
+      console.log("token", token,otp);
+      const res = 
+       await AuthRepository.verifyOTP(token, otp) 
+      // : await AuthRepository.verifyOTPOrganization(token, otp);
 
       if (!res.error) {
         router.push("/login");
         modalProps.closeModal();
         setToken("");
-      } else {
-        // Giả sử API trả về lỗi với mã "expired" nếu OTP đã hết hạn
-        if (res.error === "expired") {
-          setError(t("errors:otp-expired"));
-        } else {
-          setError(t("errors:otp-invalid"));
-        }
-      }
+      } 
     } catch (e) {
-      setError(t("errors:otp-invalid"));
+   
     } finally {
       setLoading(false);
+      setToken("");
     }
   };
 
@@ -93,6 +101,8 @@ const CheckOTPModal = ({
       console.log(e);
     } finally {
       setLoadingResend(false);
+      setOTP("");
+      setError("");
     }
   };
 

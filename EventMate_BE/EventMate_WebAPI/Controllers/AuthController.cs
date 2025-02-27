@@ -106,7 +106,7 @@ namespace EventMate_WebAPI.Controllers
             }
         }
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOTP(VerifyOTPRequest verifyOTPRequest)
+        public async Task<IActionResult> VerifyOTP([FromBody] VerifyOTPRequest verifyOTPRequest)
         {
             try
             {
