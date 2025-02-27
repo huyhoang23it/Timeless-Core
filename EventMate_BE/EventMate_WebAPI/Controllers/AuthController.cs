@@ -106,11 +106,12 @@ namespace EventMate_WebAPI.Controllers
             }
         }
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOTP(VerifyOTPRequest verifyOTPRequest)
+        public async Task<IActionResult> VerifyOTP([FromBody] VerifyOTPRequest verifyOTPRequest)
         {
             try
             {
-                var otp = await _authService.VerifyOTP(verifyOTPRequest.OTP, verifyOTPRequest.Token);
+                var userRequest = _mapper.Map<User>(verifyOTPRequest);
+                var otp = await _authService.VerifyOTP(verifyOTPRequest.OTP, verifyOTPRequest.Token, userRequest);
                 if (otp == null)
                 {
                     return BadRequest(new ApiResponse<string>(400, ResponseKeys.OtpInvalid, "OTP is not valid"));
@@ -236,8 +237,7 @@ namespace EventMate_WebAPI.Controllers
             }
 
         }
-
-
+    
     }
 
 }

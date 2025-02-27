@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import EmailValidator from "email-validator";
-import { useRouter } from "next/navigation";
+
 import { toastHelper } from "@/ultilities/toastMessageHelper";
 import { validatePassword } from "@/lib/helpers";
 import { useLanguage } from "@/providers/LanguageProvider";
@@ -14,10 +13,12 @@ import { Button } from "@/components/common/button";
 import { BUTTON_COMMON_TYPE } from "@/constants/constant";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import TermsModal from "@/components/authen/TermModal";
-
-const SignUpEventOrganizer = () => {
+interface SignUpOrganizationComponentProps {
+    setIsSignUpOrganization: (value: boolean) => void;
+}
+const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizationComponentProps) => {
   const { t } = useLanguage();
-  const router = useRouter();
+
 
   // Các trường thông tin
   const [email, setEmail] = useState<string>("");
@@ -211,17 +212,17 @@ const SignUpEventOrganizer = () => {
                   </p>
                 )}
               </div>
-                 {/* Address */}
-                 <div>
+                  {/*Address*/}
+                  <div>
                 <label className="block mb-1 font-medium text-gray-700">{t("authen:phone-number")}</label>
                 <Input
                   className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
                   type="text"
-                  name="address"
+                  name="phoneNumber"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   onBlur={handlePhoneBlur}
-                  placeholder={t("authen:phone-input")}
+                  placeholder={t("authen:address-input")}
                 />
                 {!isPhoneValid && (
                   <p className="text-red-500 text-sm mt-1">
@@ -335,7 +336,7 @@ const SignUpEventOrganizer = () => {
               onClickButton={handleSignUp}
             />
             <div className="text-center">
-              <p className="text-gray-600 cursor-pointer" onClick={() => router.push("/login")}>
+              <p className="text-gray-600 cursor-pointer" onClick={() => setIsSignUpOrganization(false)}>
                 {t("authen:already-have-account")}{" "}
                 <a className="text-blue-600 hover:underline font-medium">
                   {t("authen:login")}
@@ -350,10 +351,6 @@ const SignUpEventOrganizer = () => {
         email={email}
         token={token}
         setToken={setToken}
-        phoneNumber={phoneNumber}
-        address={companyName}
-        companyName={companyName}
-        businessLicense={businessLicense || undefined}
         modalProps={{
           isOpen: isShowCheckOTPModal,
           closeModal: () => setIsShowCheckOTPModal(false),
@@ -373,4 +370,4 @@ const SignUpEventOrganizer = () => {
   );
 };
 
-export default SignUpEventOrganizer;
+export default SignUpOrganizationComponent;

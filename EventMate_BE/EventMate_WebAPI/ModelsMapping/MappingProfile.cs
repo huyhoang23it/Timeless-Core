@@ -21,6 +21,8 @@ namespace EventMate_WebAPI.ModelsMapping
                   .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.RoleName));
             CreateMap<LoginGoogleModel, User>();
             CreateMap<ResetPasswordModel, User>();
+            CreateMap<VerifyOTPRequest, User>()
+                  .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName));
         }
     }
 }

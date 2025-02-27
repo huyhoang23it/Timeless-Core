@@ -6,7 +6,7 @@ import { Button } from "@/components/common/button";
 import ForgotpasswordModal from "@/components/authen/ForgotpasswordModal";
 import Input from "@/components/common/Input";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import InputSecret from "@/components/common/InputSecret";
 import { BUTTON_COMMON_TYPE } from "@/constants/constant";
@@ -23,7 +23,7 @@ const Login = () => {
   // Quản lý trạng thái valid
   const [isPasslValid, setIsPassValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
-
+const {data , status} = useSession();  
   // Kiểm tra password khi blur
   const handlePasswordBlur = (e: any) => {
     const value = e.target.value;
@@ -95,6 +95,7 @@ const Login = () => {
       if (result?.error) {
         toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
+      console.log(data,status);
         toastHelper.success(t("authen:login-success"));
         router.push("/");
       }

@@ -38,7 +38,10 @@ namespace EventMate_Data.Entities
         [Required]
         public Guid RoleId { get; set; } 
 
-        public string? FacebookId { get; set; }
+        public string? License { get; set; }
+        public string? CompanyName { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
 
         [Required]
         public UserStatus Status { get; set; }

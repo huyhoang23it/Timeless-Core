@@ -24,6 +24,7 @@
   "choose-file":"Choose File",
   "company-input":"Enter company name",
   "phone-input":"Enter phone number",
+  "address-input":"Enter Address",
 
   "enter-your-email-to-reset-password": "Enter your email to reset password",
   "reset-password": "Reset password",

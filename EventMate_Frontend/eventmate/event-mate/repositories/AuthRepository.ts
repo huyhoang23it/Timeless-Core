@@ -45,5 +45,18 @@ export const AuthRepository = createRepository({
 
     });
     return response;
+  },
+  
+  verifyOTPOrganization: async (fetch, token: string, otp: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Auth/verify-otp`, {
+      method: "POST",
+      data: {
+        otp,
+        token,
+      },
+
+    });
+    return response;
   }
+  
 });
