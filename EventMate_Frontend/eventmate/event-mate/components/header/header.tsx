@@ -75,19 +75,12 @@ export default function Header() {
             label: "English",
             icon: (
                 <span role="img" aria-label="English" className="mr-2">
-                    ᴇɴ
+                     ᴇɴ
                 </span>
             ),
         },
     ];
 
-    const navItems = [
-        { label: "Home", href: "/", icon: <FaHome className="mr-1" /> },
-        { label: "Music", href: "/music", icon: <FaMusic className="mr-1" /> },
-        { label: "Events", href: "/events", icon: <FaCalendarAlt className="mr-1" /> },
-        { label: "Concerts", href: "/concerts", icon: <FaGuitar className="mr-1" /> },
-        { label: "Other", href: "/other", icon: <FaEllipsisH className="mr-1" /> },
-    ];
 
     return (
         <>
@@ -98,18 +91,6 @@ export default function Header() {
                         <Link href="/">
                             <span className="text-2xl font-bold">Event Mate</span>
                         </Link>
-
-                        {/* Search box kéo dài ra */}
-                        <div className="flex-1 flex justify-center">
-                            <div className="relative w-96">
-                                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    className="w-full border rounded-full pl-10 pr-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                        </div>
 
                         {/* Các nút bên phải với khoảng cách rộng hơn */}
                         <div className="flex items-center space-x-8">
@@ -221,24 +202,6 @@ export default function Header() {
                     </div>
                 </div>
             </header>
-
-            {/* Navigation menu full width */}
-            <nav className="bg-gray-800 text-white py-3">
-                <div className="container mx-auto px-4">
-                    <div className="flex justify-start space-x-8">
-                        {navItems.map((item, idx) => (
-                            <Link
-                                key={idx}
-                                href={item.href}
-                                className="text-white hover:text-gray-300 flex items-center space-x-1 text-md"
-                            >
-                                {item.icon}
-                                <span>{item.label}</span>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </nav>
         </>
     );
 }

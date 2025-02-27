@@ -119,6 +119,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <div className="border-t mt-8 pt-4 text-center text-gray-600">
+        <p>© 2025 EventMate. All rights reserved.</p>
+      </div>
     </footer>
   );
 }

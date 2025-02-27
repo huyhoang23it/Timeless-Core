@@ -109,9 +109,9 @@ const Login = () => {
 
   return (
     // Thay đổi background của trang thành bg-gray-50 (trắng sữa)
-    <div className="flex items-center justify-center bg-gray-50 py-8">
+    <div className="flex justify-end bg-gray-50 py-8 pr-20">
       <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+        <h2 className="text-3xl font-bold text-left text-gray-800 mb-8">
           {t("authen:login")}
         </h2>
 
