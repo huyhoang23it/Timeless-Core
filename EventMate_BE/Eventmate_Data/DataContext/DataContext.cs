@@ -52,7 +52,7 @@ namespace EventMate.Data
         public DbSet<Item>? Item { get; set; }
         public DbSet<Messages>? Messages { get; set; }
         public DbSet<Order>? Orders { get; set; }
-        public DbSet<Plan_Details>? Plan_Details { get; set; }
+        public DbSet<Activity>? Activity { get; set; }
         public DbSet<Plans>? Plans { get; set; }
         public DbSet<Posts>? Posts { get; set; }
         public DbSet<Reactions>? Reactions { get; set; }

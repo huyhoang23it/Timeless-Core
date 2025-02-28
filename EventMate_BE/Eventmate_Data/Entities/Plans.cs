@@ -27,6 +27,6 @@ namespace EventMate_Data.Entities
         [Required]
         public PlanStatus Status { get; set; }
         [ForeignKey("GroupId")] public virtual Groups Groups { get; set; } = null!;
-        public virtual ICollection<Plan_Details>? Plan_Details { get; set; }
+        public virtual ICollection<Activity>? Activity { get; set; }
     }
 }

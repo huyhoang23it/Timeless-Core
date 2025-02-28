@@ -20,8 +20,8 @@ namespace EventMate_Data.Entities
         public string? GoogleId { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
-        public string? Introduce { get; set; }
-        public int? GroupSuccess {  get; set; }
+      
+       
 
         public string? Avatar { get; set; }
         public string? TokenReset { get; set; }
@@ -36,9 +36,12 @@ namespace EventMate_Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public Guid RoleId { get; set; } 
+        public Guid RoleId { get; set; }
 
-        public string? FacebookId { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
+        public string? License { get; set; }
+        public string? CompanyName { get; set; }
 
         [Required]
         public UserStatus Status { get; set; }
