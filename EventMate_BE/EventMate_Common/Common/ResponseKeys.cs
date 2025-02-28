@@ -44,7 +44,18 @@ namespace EventMate_Common.Common
         public const string EventDeleted = "event-deleted";
         public const string EventUpadated = "event-updated";
 
-
+        // Group  
+        public const string FetchGroupSuccess = "fetch-group-success";
+        public const string FetchGroupError = "cannot-fetch-group";
+        public const string DuplicateGroupName = "duplicate-group-name";
+        public const string InvalidGroupTime = "invalid-group-time"; // If applicable, otherwise, you can remove it  
+        public const string GroupCreationFailed = "group-creation-failed";
+        public const string GroupDeleted = "group-deleted";
+        public const string GroupUpdated = "group-updated";
+        public const string UserAddedToGroup = "user-added-to-group";
+        public const string ConversationAddedToGroup = "conversation-added-to-group";
+        public const string NoUsersFound = "no-users-group";
+        public const string UsersRetrieved = "users-retrieved";
 
     }
 }

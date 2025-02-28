@@ -13,9 +13,13 @@ namespace Eventmate_Data.IRepositories
         Task<IEnumerable<Groups>> GetAllGroupsAsync();
         //Task<IEnumerable<Groups>> GetGroupsByStatusAsync(GroupStatus status);
 
-        //Task<Groups?> GetGroupByIdAsync(Guid groupId);
+        Task<Groups?> GetGroupByIdAsync(Guid groupId);
         Task AddGroupAsync(Groups groupEntity);
-        //Task DeleteGroupAsync(Guid groupId);
-        //Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus);
+        Task DeleteGroupAsync(Guid groupId);
+        Task<bool> ChangeGroupStatusAsync(Guid groupId, GroupStatus newStatus);
+        Task<bool> AddUserToGroupAsync(User_Group userGroup);
+        Task<bool> AddConversationToGroupAsync(Conversations conversation);
+
+        Task<List<User>> ListUsersInGroupAsync(Guid groupId);
     }
 }

@@ -23,12 +23,18 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+
 
 builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<AwsService>();
+
+builder.Services.AddScoped<GroupService>();
+
 
 // Add services to the container.
 
