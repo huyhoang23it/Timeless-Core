@@ -13,12 +13,15 @@ import { Button } from "@/components/common/button";
 import { BUTTON_COMMON_TYPE } from "@/constants/constant";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import TermsModal from "@/components/authen/TermModal";
-interface SignUpOrganizationComponentProps {
-    setIsSignUpOrganization: (value: boolean) => void;
-}
-const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizationComponentProps) => {
-  const { t } = useLanguage();
 
+interface SignUpOrganizationComponentProps {
+  setIsSignUpOrganization: (value: boolean) => void;
+}
+
+const SignUpOrganizationComponent = ({
+  setIsSignUpOrganization,
+}: SignUpOrganizationComponentProps) => {
+  const { t } = useLanguage();
 
   // Các trường thông tin
   const [email, setEmail] = useState<string>("");
@@ -29,7 +32,10 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
+  const [isCompanyValid, setIsCompanyValid] = useState<boolean>(true);
+  const [isAddressValid, setIsAddressValid] = useState<boolean>(true);
   const [businessLicense, setBusinessLicense] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
   const [agree, setAgree] = useState<boolean>(false);
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,6 +54,12 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
   useEffect(() => {
     setChecks(validatePassword(password, confirmPassword));
   }, [password, confirmPassword]);
+
+  // Các biến xác định lỗi cho password & confirm password
+  const passwordError =
+    password !== "" &&
+    (!checks.length || !checks.uppercase || !checks.number || !checks.specialChar);
+  const confirmPasswordError = confirmPassword !== "" && !checks.match;
 
   // Validate email
   const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -78,27 +90,60 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
     }
   };
 
+  // Validate Company: không được để trống
+  const handleCompanyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!value.trim()) {
+      setIsCompanyValid(false);
+      toastHelper.error(t("errors:validate-company-required"));
+    } else {
+      setIsCompanyValid(true);
+    }
+  };
+
+  // Validate Address: không được để trống
+  const handleAddressBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!value.trim()) {
+      setIsAddressValid(false);
+      toastHelper.error(t("errors:validate-address-required"));
+    } else {
+      setIsAddressValid(true);
+    }
+  };
+
   // Form hợp lệ khi tất cả các điều kiện đều đáp ứng
   const isFormValid =
     !!email &&
     isEmailValid &&
     Object.values(checks).every(Boolean) &&
     !!companyName &&
+    isCompanyValid &&
     !!phoneNumber &&
     isPhoneValid &&
+    !!address &&
+    isAddressValid &&
     !!businessLicense &&
     agree;
 
   // Xử lý chọn file thông qua Button
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleChooseFile = () => fileInputRef.current?.click();
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBusinessLicense(e.target.files[0]);
+      const file = e.target.files[0];
+      // Kiểm tra loại file: chỉ cho phép ảnh hoặc PDF
+      if (!file.type.startsWith("image/") && file.type !== "application/pdf") {
+        toastHelper.error(t("errors:validate-file-type") || "Vui lòng tải lên file ảnh hoặc PDF");
+        return;
+      }
+      setBusinessLicense(file);
+      setFilePreview(URL.createObjectURL(file));
     }
   };
 
-  // Xử lý đăng ký: sử dụng chung hàm tạo OTP
+  // Xử lý đăng ký: sử dụng hàm tạo OTP
   const handleSignUp = async () => {
     if (!isFormValid) {
       toastHelper.error(t("authen:please-complete-all-fields"));
@@ -121,162 +166,186 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="flex justify-end bg-gray-50 py-8 pr-20">
       <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-4xl mx-4">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           {t("authen:event-signup")}
         </h2>
         <div className="space-y-6">
-          {/* Chia làm 2 cột */}
-          <div className="md:flex md:space-x-6">
-            {/* Cột bên trái */}
-            <div className="flex-1 space-y-4">
-              {/* Email */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">
-                  {t("authen:email")}
-                </label>
-                <Input
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onBlur={handleEmailBlur}
-                  placeholder={t("authen:email-input")}
-                />
+          <div className="grid grid-cols-2 gap-6">
+            {/* Hàng 1: Email & Company Name */}
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:email")}
+              </label>
+              <Input
+                className={`h-12 w-full rounded-lg pr-4 border ${!isEmailValid ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={handleEmailBlur}
+                placeholder={t("authen:email-input")}
+              />
+              <div className="h-6">
                 {!isEmailValid && (
                   <p className="text-red-500 text-sm mt-1">
                     {t("errors:validate-email-failed")}
                   </p>
                 )}
               </div>
-              {/* Password */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">
-                  {t("authen:new-pass")}
-                </label>
-                <InputSecret
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("authen:password-input")}
-                />
-              </div>
-              {/* Confirm Password */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">
-                  {t("authen:confirm-pass")}
-                </label>
-                <InputSecret
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="password"
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder={t("authen:password-input")}
-                />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:company-name")}
+              </label>
+              <Input
+                className={`h-12 w-full rounded-lg pr-4 border ${!isCompanyValid ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="text"
+                name="companyName"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                onBlur={handleCompanyBlur}
+                placeholder={t("authen:company-input")}
+              />
+              <div className="h-6">
+                {!isCompanyValid && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {t("errors:validate-company-required")}
+                  </p>
+                )}
               </div>
             </div>
-            {/* Cột bên phải */}
-            <div className="flex-1 space-y-4 mt-6 md:mt-0">
-              {/* Company Name */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">{t("authen:company-name")}</label>
-                <Input
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="text"
-                  name="companyName"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder={t("authen:company-input")}
-                />
-              </div>
-              {/* Phone Number */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">{t("authen:phone-number")}</label>
-                <Input
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="text"
-                  name="phoneNumber"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  onBlur={handlePhoneBlur}
-                  placeholder={t("authen:phone-input")}
-                />
+
+            {/* Hàng 2: Password & Phone Number */}
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:new-pass")}
+              </label>
+              <InputSecret
+                className={`h-12 w-full rounded-lg pr-4 border ${passwordError ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t("authen:password-input")}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:phone-number")}
+              </label>
+              <Input
+                className={`h-12 w-full rounded-lg pr-4 border ${!isPhoneValid ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="text"
+                name="phoneNumber"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                onBlur={handlePhoneBlur}
+                placeholder={t("authen:phone-input")}
+              />
+              <div className="h-6">
                 {!isPhoneValid && (
                   <p className="text-red-500 text-sm mt-1">
                     {t("errors:validate-phone-failed")}
                   </p>
                 )}
               </div>
-                  {/*Address*/}
-                  <div>
-                <label className="block mb-1 font-medium text-gray-700">{t("authen:phone-number")}</label>
-                <Input
-                  className="h-12 w-full rounded-lg pr-4 border border-gray-300 focus:border-primary-500"
-                  type="text"
-                  name="phoneNumber"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  onBlur={handlePhoneBlur}
-                  placeholder={t("authen:address-input")}
-                />
-                {!isPhoneValid && (
+            </div>
+
+            {/* Hàng 3: Confirm Password & Address */}
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:confirm-pass")}
+              </label>
+              <InputSecret
+                className={`h-12 w-full rounded-lg pr-4 border ${confirmPasswordError ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder={t("authen:password-input")}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:address")}
+              </label>
+              <Input
+                className={`h-12 w-full rounded-lg pr-4 border ${!isAddressValid ? "border-red-500" : "border-gray-300"
+                  } focus:border-primary-500`}
+                type="text"
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                onBlur={handleAddressBlur}
+                placeholder={t("authen:address-input")}
+              />
+              <div className="h-6">
+                {!isAddressValid && (
                   <p className="text-red-500 text-sm mt-1">
-                    {t("errors:validate-phone-failed")}
+                    {t("errors:validate-address-required")}
                   </p>
                 )}
               </div>
-              
-              {/* Business License */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">{t("authen:license")}</label>
-                <div className="flex items-center space-x-4">
-                  <Button
-                    label={t("authen:choose-file")}
-                    variant={BUTTON_COMMON_TYPE.PRIMARY}
-                    onClickButton={handleChooseFile}
-                  />
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  {businessLicense && (
-                    <p className="text-gray-600 text-sm">{businessLicense.name}</p>
-                  )}
+            </div>
+
+            {/* Hàng 4: Business License (chiếm 2 cột) */}
+            <div className="mb-4 col-span-2">
+              <label className="block mb-1 font-medium text-gray-700">
+                {t("authen:license")}
+              </label>
+              <div className="flex items-center space-x-4">
+                <Button
+                  label={t("authen:choose-file")}
+                  variant={BUTTON_COMMON_TYPE.PRIMARY}
+                  onClickButton={handleChooseFile}
+                />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
+              {filePreview && (
+                <div className="mt-2">
+                  {businessLicense?.type.startsWith("image/") ? (
+                    <img
+                      src={filePreview}
+                      alt="File Preview"
+                      className="w-full max-h-60 object-contain border"
+                    />
+                  ) : businessLicense?.type === "application/pdf" ? (
+                    <embed
+                      src={filePreview}
+                      type="application/pdf"
+                      className="w-full h-60 border"
+                    />
+                  ) : null}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
           {/* Checklist validate mật khẩu */}
-          <ul className="mt-4 mb-4 space-y-1">
+          <ul
+            className={`mt-4 mb-4 space-y-1 border ${Object.values(checks).every(Boolean)
+              ? "border-green-500"
+              : "border-red-500"
+              } p-4 rounded-lg`}
+          >
             {[
-              {
-                key: "length",
-                message: t("authen:password-validation:length"),
-              },
-              {
-                key: "uppercase",
-                message: t("authen:password-validation:uppercase"),
-              },
-              {
-                key: "number",
-                message: t("authen:password-validation:number"),
-              },
-              {
-                key: "specialChar",
-                message: t("authen:password-validation:specialChar"),
-              },
-              {
-                key: "match",
-                message: t("authen:password-validation:match"),
-              },
+              { key: "length", message: t("authen:password-validation:length") },
+              { key: "uppercase", message: t("authen:password-validation:uppercase") },
+              { key: "number", message: t("authen:password-validation:number") },
+              { key: "specialChar", message: t("authen:password-validation:specialChar") },
+              { key: "match", message: t("authen:password-validation:match") },
             ].map((item) => (
               <li
                 key={item.key}
@@ -317,7 +386,6 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
                 </a>
               </label>
             </div>
-
             {showTermsModal && (
               <TermsModal
                 modalProps={{
@@ -327,7 +395,6 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
                 }}
               />
             )}
-
             <Button
               className="w-full font-semibold text-white py-3"
               label={t("authen:continue")}
@@ -337,8 +404,16 @@ const SignUpOrganizationComponent = ({setIsSignUpOrganization}: SignUpOrganizati
             />
             <div className="text-center">
               <p className="text-gray-600 cursor-pointer" onClick={() => setIsSignUpOrganization(false)}>
-                {t("authen:already-have-account")}{" "}
                 <a className="text-blue-600 hover:underline font-medium">
+                  {t("authen:or-sign-up-normal")}
+                </a>
+              </p>
+            </div>
+
+            <div className="text-center mt-4">
+              <p className="text-gray-600">
+                {t("authen:already-have-account")}{" "}
+                <a href="/login" className="text-blue-600 hover:underline font-medium">
                   {t("authen:login")}
                 </a>
               </p>

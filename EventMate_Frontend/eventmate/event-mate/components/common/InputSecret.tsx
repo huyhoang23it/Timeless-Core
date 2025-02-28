@@ -17,9 +17,9 @@ const InputSecret = ({
             />
             <div className="absolute inset-y-0 right-3 flex items-center cursor-pointer" onClick={togglePassword}>
                 {isRevealPassword ? (
-                    <EyeIcon className='w-5 h-5 text-gray-600' />
-                ) : (
                     <EyeSlashIcon className='w-5 h-5 text-gray-600' />
+                ) : (
+                    <EyeIcon className='w-5 h-5 text-gray-600' />
                 )}
             </div>
         </div>

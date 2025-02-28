@@ -24,7 +24,11 @@
     "choose-file":"Chọn File",
     "company-input":"Nhập tên công ty",
     "phone-input":"Nhập số điện thoại",
+    "address":"Địa chỉ",
     "address-input":"Nhập địa chỉ",
+    "or-sign-up-as": "Hoặc Đăng Ký",
+    "event-organizer": "Tổ Chức Sự Kiện",
+    "or-sign-up-normal":"Hoặc Đăng Ký Bình Thường",
 
     "enter-your-email-to-reset-password": "Nhập email của bạn để đặt lại mật khẩu",
     "reset-password": "Đặt lại mật khẩu",
@@ -39,13 +43,13 @@
     "resend-otp": "Gửi lại OTP",
      "continue":"Tiếp tục",
 
-     "password-validation": {
-        "length": "Mật khẩu phải từ 8 - 32 ký tự.",
-        "lowercase": "Mật khẩu phải chứa ít nhất một chữ thường.",
-        "uppercase": "Mật khẩu phải chứa ít nhất một chữ in hoa.",
-        "number": "Mật khẩu phải chứa ít nhất một số.",
-        "specialChar": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt.",
-        "match": "Mật khẩu nhập lại phải khớp với mật khẩu ban đầu."
+    "password-validation": {
+      "length": "Mật khẩu 8-32 ký tự.",
+      "lowercase": "Ít nhất một chữ thường.",
+      "uppercase": "Ít nhất một chữ in hoa.",
+      "number": "Ít nhất một số.",
+      "specialChar": "Ít nhất một ký tự đặc biệt.",
+      "match": "Mật khẩu nhập lại phải khớp."
     }
   }
   
