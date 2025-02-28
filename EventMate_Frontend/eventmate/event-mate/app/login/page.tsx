@@ -110,12 +110,24 @@ const Login = () => {
 
   return (
     // Thay đổi background của trang thành bg-gray-50 (trắng sữa)
-    <div className="flex justify-end bg-gray-50 py-8 pr-20">
+<div
+  className="min-h-screen flex items-center justify-center"
+  style={{
+    backgroundImage: "url('/images/designed-background.gif')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    width: "100vw",
+    height: "100vh",
+  }}
+>
+
       <div className="bg-gray-50 shadow-2xl rounded-lg px-10 py-12 w-full max-w-md mx-4">
+        <div className="flex justify-center">
         <h2 className="text-3xl font-bold text-left text-gray-800 mb-8">
           {t("authen:login")}
         </h2>
-
+</div>
         <div className="space-y-4">
           {/* Email */}
           <div>

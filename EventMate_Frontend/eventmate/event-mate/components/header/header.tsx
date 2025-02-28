@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+
 import {
     FaHome,
     FaMusic,
@@ -88,9 +90,15 @@ export default function Header() {
             <header className="bg-white border-b">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
-                        <Link href="/">
-                            <span className="text-2xl font-bold">Event Mate</span>
-                        </Link>
+                    <Link href="/" className="flex items-center space-x-3"> {/* Đảm bảo nằm cùng hàng */}
+        <img 
+          src="/images/icon.png" 
+          alt="Event Mate Logo" 
+          className="h-10 w-auto object-contain" // Điều chỉnh kích thước logo
+        />
+        <span className="text-2xl font-bold text-gray-600 whitespace-nowrap">Event Mate</span> {/* Đảm bảo không bị xuống dòng */}
+      </Link>
+
 
                         {/* Các nút bên phải với khoảng cách rộng hơn */}
                         <div className="flex items-center space-x-8">

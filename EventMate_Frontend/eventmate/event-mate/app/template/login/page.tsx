@@ -27,6 +27,7 @@ const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+    style={{ backgroundImage: "url('/images/back-ground.png')" }}
     >
 
       {/* Container chính với hiệu ứng scale */}
@@ -34,7 +35,7 @@ const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false
         className="bg-white/80 backdrop-blur-lg shadow-xl rounded-xl px-8 py-10 w-full max-w-md mx-4"
       >
         {/* Tiêu đề */}
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">LOGIN</h2>
 
         {/* Form đăng nhập */}
         {/* Input Email */}
