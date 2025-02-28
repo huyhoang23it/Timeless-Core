@@ -93,17 +93,6 @@ const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false
             >
               Sign Up {" "}
             </a>
-            Or{" "}
-            <a
-              href="#"
-              className="relative text-blue-600 font-medium transition-all duration-300
-             before:absolute before:-bottom-1 before:left-1/2 before:w-0 before:h-[2px] 
-             before:bg-blue-600 before:transition-all before:duration-300 
-             hover:text-blue-700 hover:before:w-full hover:before:left-0 
-             hover:scale-105"
-            >
-              Sign up As Event Organizer
-            </a>
 
           </p>
         </div>
@@ -111,7 +100,7 @@ const [isShowForgotPasswordModal, setIsShowForgotPasswordModal] = useState(false
         {/* Hoặc đăng nhập với mạng xã hội */}
         <div className="relative flex py-4 items-center">
           <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-2 text-gray-500">Or Sign In With</span>
+          <span className="mx-2 text-gray-500">Or Log In With</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
