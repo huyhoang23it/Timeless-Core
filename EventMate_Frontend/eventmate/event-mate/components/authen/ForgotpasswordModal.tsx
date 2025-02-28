@@ -50,7 +50,7 @@ const ForgotPasswordModal = ({ modalProps }: ForgotPasswordModalProps) => {
   };
 
   return (
-    <Modal {...modalProps} widthMd="max-w-lg">
+    <Modal {...modalProps} widthMd="max-w-xl md:max-w-2xl">
       <div className="bg-white rounded-xl p-8 w-full mx-auto">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
         {t("authen:enter-your-email-to-reset-password")}

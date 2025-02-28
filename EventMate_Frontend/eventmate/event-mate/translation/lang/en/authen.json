@@ -24,8 +24,12 @@
   "choose-file":"Choose File",
   "company-input":"Enter company name",
   "phone-input":"Enter phone number",
+  "address":"Address",
   "address-input":"Enter Address",
-
+  "or-sign-up-as": "Or Sign Up As",
+  "event-organizer": "Event Organizer",
+  "or-sign-up-normal":"Or Sign Up As Normal User",
+  
   "enter-your-email-to-reset-password": "Enter your email to reset password",
   "reset-password": "Reset password",
   "new-pass": "New Password",
@@ -45,6 +49,7 @@
     "lowercase": "At least one lowercase letter.",
     "uppercase": "At least one uppercase letter.",
     "number": "At least one number.",
-    "specialChar": "At least one special character."
+    "specialChar": "At least one special character.",
+    "match": "Confirm password and password must match."
   }
 }

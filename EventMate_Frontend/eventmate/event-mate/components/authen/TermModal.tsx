@@ -12,8 +12,8 @@ export default function TermsModal({ modalProps }: TermsModalProps) {
     const { t } = useLanguage();
 
     return (
-        <Modal {...modalProps} widthMd="max-w-md">
-            <div className="rounded-xl px-6 py-6 w-full bg-white shadow-lg">
+        <Modal {...modalProps} widthMd="max-w-xl md:max-w-2xl">
+            <div className="rounded-xl px-6 py-6 w-full bg-white shadow-lg h-[500px] overflow-auto">
                 <h2 className="text-xl font-semibold text-center text-gray-900">
                     {t("authen:terms-title") || "Terms and Conditions"}
                 </h2>
