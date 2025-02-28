@@ -23,7 +23,7 @@ const Login = () => {
   // Quản lý trạng thái valid
   const [isPasslValid, setIsPassValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
-const {data , status} = useSession();  
+  const { data, status } = useSession();
   // Kiểm tra password khi blur
   const handlePasswordBlur = (e: any) => {
     const value = e.target.value;
@@ -95,7 +95,7 @@ const {data , status} = useSession();
       if (result?.error) {
         toastHelper.error(t(`authen:login-fail-${result.status}`));
       } else {
-      console.log(data,status);
+        console.log(data, status);
         toastHelper.success(t("authen:login-success"));
         router.push("/");
       }
@@ -124,8 +124,8 @@ const {data , status} = useSession();
             </label>
             <Input
               className={`h-12 w-full rounded-lg pr-4 border ${isEmailValid
-                  ? "border-gray-300 focus:border-primary-500"
-                  : "border-red-500 focus:border-red-600"
+                ? "border-gray-300 focus:border-primary-500"
+                : "border-red-500 focus:border-red-600"
                 }`}
               type="text"
               name="email"
@@ -148,8 +148,8 @@ const {data , status} = useSession();
             </label>
             <InputSecret
               className={`h-12 w-full rounded-lg pr-4 border ${isPasslValid
-                  ? "border-gray-300 focus:border-primary-500"
-                  : "border-red-500 focus:border-red-600"
+                ? "border-gray-300 focus:border-primary-500"
+                : "border-red-500 focus:border-red-600"
                 }`}
               type="password"
               name="password"
@@ -183,14 +183,10 @@ const {data , status} = useSession();
         />
 
         <div className="text-center mt-6">
-          <p className="text-gray-600">{t("authen:no-account")}</p>
           <p className="text-gray-600 mt-1">
-            <a href="#" className="text-blue-600 hover:underline font-medium">
+          {t("authen:no-account")}{" "}
+            <a href="/signUp" className="text-blue-600 hover:underline font-medium">
               {t("authen:signup")}
-            </a>{" "}
-            {t("authen:or")}{" "}
-            <a href="#" className="text-blue-600 hover:underline font-medium">
-              {t("authen:signup-event-organizer")}
             </a>
           </p>
         </div>
